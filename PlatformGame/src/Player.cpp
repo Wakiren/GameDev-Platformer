@@ -18,7 +18,6 @@ Player::~Player() {
 }
 
 bool Player::Awake() {
-
 	//L03: TODO 2: Initialize Player parameters
 	position = Vector2D(0, 0);
 	return true;
@@ -39,6 +38,8 @@ bool Player::Start() {
 	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
 
+
+
 	return true;
 }
 
@@ -48,6 +49,7 @@ bool Player::Update(float dt)
 	Jumping();
 	SetPosition();
 	TextureRendering();
+	CameraFollow(dt);
 	return true;
 }
 
@@ -81,7 +83,6 @@ void Player::Jumping()
 	{
 		if (canJump > 0)
 		{
-			printf("BOING!");
 			velocity.y = -4;
 			canJump--;
 			pbody->body->SetLinearVelocity(velocity);
@@ -97,12 +98,22 @@ void Player:: TextureRendering()
 
 void Player::SetPosition() 
 {
-
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 }
 
+void Player::CameraFollow(float dt) 
+{
+	//No need for delta time because it is already implemented in horizontal velocity
+	Engine::GetInstance().render.get()->camera.x = Lerp(Engine::GetInstance().render.get()->camera.x,
+	-METERS_TO_PIXELS(pbody->body->GetPosition().x), 0.01f);
+}
+
+float Player::Lerp(float a, float b, float t)
+{
+		return a + t * (b - a);
+}
 // L08 TODO 6: Define OnCollision function for the player. 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)

@@ -29,6 +29,10 @@ public:
 
 	void SetPosition();
 
+	void CameraFollow(float dt);
+
+	float Lerp(float a, float b, float t);
+
 	int canJump = 2;
 
 	enum States 
