@@ -21,6 +21,27 @@ public:
 
 	bool CleanUp();
 
+	void Walking(float dt);
+
+	void Jumping();
+
+	void TextureRendering();
+
+	void SetPosition();
+
+	int canJump = 2;
+
+	enum States 
+	{
+		IDLE,
+		WALKING,
+		RUNNING,
+		JUMPING,
+		CLIMBING,
+		FALLING,
+		DIED
+	};
+
 	// L08 TODO 6: Define OnCollision function for the player. 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 

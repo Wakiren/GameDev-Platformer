@@ -44,24 +44,10 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
-	// L08 TODO 5: Add physics to the player - updated player position using physics
-	b2Vec2 velocity = b2Vec2(0, 0);
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		velocity.x = -0.2 * dt;
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		velocity.x = 0.2 * dt;
-	}
-
-	velocity.y = pbody->body->GetLinearVelocity().y;
-	pbody->body->SetLinearVelocity(velocity);
-	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+	Walking(dt);
+	Jumping();
+	SetPosition();
+	TextureRendering();
 	return true;
 }
 
@@ -72,12 +58,58 @@ bool Player::CleanUp()
 	return true;
 }
 
+void Player::Walking(float dt) 
+{
+	b2Vec2 velocity = b2Vec2(0, 0);
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+		velocity.x = -0.2 * dt;
+	}
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		velocity.x = 0.2 * dt;
+	}
+	velocity.y = pbody->body->GetLinearVelocity().y;
+	pbody->body->SetLinearVelocity(velocity);
+}
+
+void Player::Jumping() 
+{
+	b2Vec2 velocity = b2Vec2(0, 0);
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
+	{
+		if (canJump > 0)
+		{
+			printf("BOING!");
+			velocity.y = -4;
+			canJump--;
+			pbody->body->SetLinearVelocity(velocity);
+		}
+	}
+
+}
+
+void Player:: TextureRendering()
+{
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+}
+
+void Player::SetPosition() 
+{
+
+	b2Transform pbodyPos = pbody->body->GetTransform();
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+}
+
 // L08 TODO 6: Define OnCollision function for the player. 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
+		canJump = 2;
 		break;
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
