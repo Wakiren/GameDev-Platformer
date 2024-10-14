@@ -45,7 +45,7 @@ bool Player::Start() {
 bool Player::Update(float dt)
 {
 	// L08 TODO 5: Add physics to the player - updated player position using physics
-	b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
+	b2Vec2 velocity = b2Vec2(0, 0);
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		velocity.x = -0.2 * dt;
@@ -55,6 +55,7 @@ bool Player::Update(float dt)
 		velocity.x = 0.2 * dt;
 	}
 
+	velocity.y = pbody->body->GetLinearVelocity().y;
 	pbody->body->SetLinearVelocity(velocity);
 	b2Transform pbodyPos = pbody->body->GetTransform();
 	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
