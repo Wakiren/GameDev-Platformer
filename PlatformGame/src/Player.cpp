@@ -26,11 +26,13 @@ bool Player::Awake() {
 bool Player::Start() {
 
 	//L03: TODO 2: Initialize Player parameters
-	texture = Engine::GetInstance().textures.get()->Load("Assets/Textures/player1.png");
+	//texture = Engine::GetInstance().textures.get()->Load("Assets/Textures/player1.png");
+
+	animations = Engine::GetInstance().textures.get()->Load("Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png");
 
 	// L08 TODO 5: Add physics to the player - initialize physics body
-	Engine::GetInstance().textures.get()->GetSize(texture, texW, texH);
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), texW / 2, bodyType::DYNAMIC);
+	Engine::GetInstance().textures.get()->GetSize(animations, aniW, aniH);
+	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20, bodyType::DYNAMIC);
 
 	// L08 TODO 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -56,7 +58,8 @@ bool Player::Update(float dt)
 bool Player::CleanUp()
 {
 	LOG("Cleanup player");
-	Engine::GetInstance().textures.get()->UnLoad(texture);
+	//Engine::GetInstance().textures.get()->UnLoad(texture);
+	Engine::GetInstance().textures.get()->UnLoad(animations);
 	return true;
 }
 
@@ -90,31 +93,47 @@ void Player::Jumping()
 	}
 
 }
-
 void Player:: TextureRendering()
 {
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+	int currentFrame;
+	int maxFrames;
+	
+	SDL_Rect frame;
+
+	const int tileSize = 16;
+	int tilePosX = 0;
+	int tilePosY = 13;
+	frame.x = tileSize * tilePosX;
+	frame.y = tileSize * tilePosY;
+	frame.w = tileSize;
+	frame.h = tileSize;
+
+	//Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
+	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX(),(int)position.getY(), 
+	&frame, 1.0f, 0.0f, frame.w/2, frame.h/2, 2);
 }
 
 void Player::SetPosition() 
 {
+	int tileSize = 16;
+	int numTilesInMapX = 20;
 	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - aniW / numTilesInMapX );
+	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - aniH / numTilesInMapX + tileSize/2);
 }
 
 void Player::CameraFollow(float dt) 
 {
 	//No need for delta time because it is already implemented in horizontal velocity
 	Engine::GetInstance().render.get()->camera.x = Lerp(Engine::GetInstance().render.get()->camera.x,
-	-METERS_TO_PIXELS(pbody->body->GetPosition().x), 0.01f);
+	-METERS_TO_PIXELS(pbody->body->GetPosition().x), 0.06f);
 }
 
 float Player::Lerp(float a, float b, float t)
 {
 		return a + t * (b - a);
 }
-// L08 TODO 6: Define OnCollision function for the player. 
+
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{

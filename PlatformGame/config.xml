@@ -23,7 +23,7 @@
   </scene>
 
   <entities>
-	  <player x="550" y="1700" w="100" h ="32" speed="7.0" texturepath="Assets/Textures/Idle.png">
+	  <player x="600" y="1700" w="100" h ="32" speed="7.0" texturepath="Assets/Textures/Idle.png">
 		<animations>
 			<Idle loop="true" speed ="0.5">
 				<frame x="0" y="32" w="32" h="32"/>
