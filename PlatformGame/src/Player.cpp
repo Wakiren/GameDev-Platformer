@@ -40,7 +40,8 @@ bool Player::Start() {
 	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
 
-
+	state = State::IDLE;
+	facing = Facing::RIGHT;
 
 	return true;
 }
@@ -48,7 +49,8 @@ bool Player::Start() {
 bool Player::Update(float dt)
 {
 	Walking(dt);
-	Jumping();
+	Jumping(dt);
+	Dashing(dt);
 	SetPosition();
 	TextureRendering();
 	CameraFollow(dt);
@@ -66,19 +68,32 @@ bool Player::CleanUp()
 void Player::Walking(float dt) 
 {
 	b2Vec2 velocity = b2Vec2(0, 0);
-
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+		facing = Facing::LEFT;
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) 
+		{
+			Running(dt);
+			return;
+		}
 		velocity.x = -0.2 * dt;
+		state = State::WALKING;
 	}
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		facing = Facing::RIGHT;
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		{
+			Running(dt);
+			return;
+		}
 		velocity.x = 0.2 * dt;
+		state = State::WALKING;
 	}
 	velocity.y = pbody->body->GetLinearVelocity().y;
 	pbody->body->SetLinearVelocity(velocity);
 }
 
-void Player::Jumping() 
+void Player::Jumping(float dt) 
 {
 	b2Vec2 velocity = b2Vec2(0, 0);
 
@@ -86,13 +101,57 @@ void Player::Jumping()
 	{
 		if (canJump > 0)
 		{
-			velocity.y = -4;
+			state = State::JUMPING;
+			velocity.y = -0.3 * dt;
 			canJump--;
 			pbody->body->SetLinearVelocity(velocity);
 		}
 	}
 
 }
+
+void Player::Running(float dt) 
+{
+	b2Vec2 velocity = pbody->body->GetLinearVelocity();
+	if (facing == Facing::LEFT) 
+	{
+		velocity.x = 0.4f * dt;
+	}
+	else 
+	{
+		velocity.x = 0.4f * dt;
+	}
+
+	pbody->body->SetLinearVelocity(velocity);
+	state = State::RUNNING;
+}
+
+void Player::Dashing(float dt) 
+{
+
+	b2Vec2 velocity = pbody->body->GetLinearVelocity();
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
+	{
+		activateTimer = true;
+		currentTime = dashDuration;
+	}
+
+	if (activateTimer && currentTime > 0) 
+	{
+		currentTime -= dt;
+		if (facing == Facing::LEFT)
+		{
+			velocity.x = 1.0f * dt;
+		}
+		else
+		{
+			velocity.x = 1.0f * dt;
+		}
+		pbody->body->SetLinearVelocity(velocity);
+	}
+	state = State::DASHING;
+}
+
 void Player:: TextureRendering()
 {
 	int currentFrame;

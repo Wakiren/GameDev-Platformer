@@ -23,7 +23,11 @@ public:
 
 	void Walking(float dt);
 
-	void Jumping();
+	void Running(float dt);
+
+	void Jumping(float dt);
+
+	void Dashing(float dt);
 
 	void TextureRendering();
 
@@ -33,18 +37,27 @@ public:
 
 	float Lerp(float a, float b, float t);
 
-	int canJump = 2;
+	int canJump = 0;
 
-	enum States 
+	enum class State
 	{
 		IDLE,
 		WALKING,
 		RUNNING,
 		JUMPING,
+		DASHING,
 		CLIMBING,
 		FALLING,
 		DIED
 	};
+	enum class Facing
+	{
+		LEFT,
+		RIGHT
+	};
+
+	State state;
+	Facing facing;
 
 	// L08 TODO 6: Define OnCollision function for the player. 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
@@ -58,6 +71,10 @@ public:
 
 	int texW, texH;
 	int aniW, aniH;
+
+	float dashDuration = 60.0f;
+	float currentTime = dashDuration;
+	bool activateTimer = false;
 
 	//Audio fx
 	int pickCoinFxId;
