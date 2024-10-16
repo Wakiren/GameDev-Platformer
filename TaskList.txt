@@ -1,0 +1,13 @@
+Francisco Javier Pedreño:
+- Jumping
+- Double Jumping
+- Running
+- Dashing
+- Player State System
+- Modified DrawTexture Function to allow for scaling
+- Implemented Player Sprite
+
+Li Zhehao:
+- Level 1 Tilemap
+
+Alba Fernández Hernández:
