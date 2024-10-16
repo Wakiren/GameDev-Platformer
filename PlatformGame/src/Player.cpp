@@ -43,6 +43,9 @@ bool Player::Start() {
 	state = State::IDLE;
 	facing = Facing::RIGHT;
 
+	printf("PlayerPosX: %d \n", position.getX());
+	printf("CirclePosX: %d \n", pbody->body->GetPosition().x);
+
 	return true;
 }
 
@@ -168,8 +171,7 @@ void Player:: TextureRendering()
 	frame.h = tileSize;
 
 	//Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
-	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX(), (int)position.getY(),&frame);
-		//1.0f, 0.0f, frame.w/2, frame.h/2, 2);
+	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8, (int)position.getY() + 4 ,&frame,1.0f, 0.0f, frame.w/2, frame.h/2, 1);
 }
 
 void Player::SetPosition() 
