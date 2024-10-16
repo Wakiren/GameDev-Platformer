@@ -60,11 +60,6 @@ bool Map::Update(float dt)
                                 Vector2D mapCoord = MapToWorld(i, j);
                                 //Draw the texture
                                 Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
-                                if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) 
-                                {
-                                    PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(i*16 + 8, j*16 + 8, 14, 14, STATIC);
-                                    c1->ctype = ColliderType::PLATFORM;
-                                }
                             }
                         }
                     }
@@ -188,6 +183,30 @@ bool Map::Load(std::string path, std::string fileName)
         // L08 TODO 3: Create colliders
         // L08 TODO 7: Assign collider type
         // Later you can create a function here to load and create the colliders from the map
+        for (const auto& mapLayer : mapData.layers) {
+            //Check if the property Draw exist get the value, if it's true draw the lawyer
+            if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) {
+                for (int i = 0; i < mapData.width; i++) {
+                    for (int j = 0; j < mapData.height; j++) {
+                        int gid = mapLayer->Get(i, j);
+                        //Check if the gid is different from 0 - some tiles are empty
+                        if (gid != 0) {
+                            //L09: TODO 3: Obtain the tile set using GetTilesetFromTileId
+                            TileSet* tileSet = GetTilesetFromTileId(gid);
+                            if (tileSet != nullptr) {
+                                //Dynamic colliders
+                                if (mapLayer->properties.GetProperty("Colision") != NULL && mapLayer->properties.GetProperty("Colision")->value == true)
+                                {
+                                    PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(i * 16 + 8, j * 16 + 8, 14, 14, STATIC);
+                                    c1->ctype = ColliderType::PLATFORM;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(224 + 128, 544 + 32, 256, 64, STATIC);
         c1->ctype = ColliderType::PLATFORM;
 
