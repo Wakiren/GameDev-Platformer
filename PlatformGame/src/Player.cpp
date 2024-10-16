@@ -19,7 +19,7 @@ Player::~Player() {
 
 bool Player::Awake() {
 	//L03: TODO 2: Initialize Player parameters
-	position = Vector2D(0, 0);
+	position = Vector2D(64, 0);
 	return true;
 }
 
@@ -32,7 +32,7 @@ bool Player::Start() {
 
 	// L08 TODO 5: Add physics to the player - initialize physics body
 	Engine::GetInstance().textures.get()->GetSize(animations, aniW, aniH);
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20, bodyType::DYNAMIC);
+	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20 / 2, bodyType::DYNAMIC);
 
 	// L08 TODO 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -168,8 +168,8 @@ void Player:: TextureRendering()
 	frame.h = tileSize;
 
 	//Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
-	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX(),(int)position.getY(), 
-	&frame, 1.0f, 0.0f, frame.w/2, frame.h/2, 2);
+	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX(), (int)position.getY(),&frame);
+		//1.0f, 0.0f, frame.w/2, frame.h/2, 2);
 }
 
 void Player::SetPosition() 

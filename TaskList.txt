@@ -6,6 +6,9 @@ Francisco Javier Pedreño:
 - Player State System
 - Modified DrawTexture Function to allow for scaling
 - Implemented Player Sprite
+- Implemented Camera Follow
+- Implemented Level 
+- Implemented Dynamic Collisions
 
 Li Zhehao:
 - Level 1 Tilemap

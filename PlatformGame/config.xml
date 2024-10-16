@@ -11,7 +11,8 @@
   </render>
 
   <window>
-    <resolution width="1280" height="720" scale="1"/>
+    
+    <resolution width="1280/3.5" height="720/3.5" scale="3.5"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -19,11 +20,11 @@
   </window>
 
   <scene>
-    <map path="Assets/Maps/" name="MapTemplate.tmx"/>
+    <map path="Assets/Maps/" name="Map_Level1.tmx"/>
   </scene>
 
   <entities>
-	  <player x="600" y="1700" w="100" h ="32" speed="7.0" texturepath="Assets/Textures/Idle.png">
+	  <player x="600" y="1700" w="16" h ="16" speed="7.0" texturepath="Assets/Textures/Idle.png">
 		<animations>
 			<Idle loop="true" speed ="0.5">
 				<frame x="0" y="32" w="32" h="32"/>

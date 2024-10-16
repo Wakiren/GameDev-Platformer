@@ -6,11 +6,12 @@ Implemented Features:
 - Dashing
 - Jumping
 - Double Jumping
+- Level Rendering
+- Dynamic Collisions
 
 To do (in order of priority from most to least):
-- Implement our level *(MUST)*
-- Dynamic Collisions with map *(MUST)*
 - Player Walk/Jump/Die Animations *(MUST)*
+- Fix collision-related bug (low framerate when creating colliders)
 - Modify parameters from config files (ex. audio, pos...)
 - Confirm delta time is working
 - Debug functionalities

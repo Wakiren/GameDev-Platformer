@@ -60,6 +60,11 @@ bool Map::Update(float dt)
                                 Vector2D mapCoord = MapToWorld(i, j);
                                 //Draw the texture
                                 Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
+                                if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) 
+                                {
+                                    PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(i*16 + 8, j*16 + 8, 14, 14, STATIC);
+                                    c1->ctype = ColliderType::PLATFORM;
+                                }
                             }
                         }
                     }
