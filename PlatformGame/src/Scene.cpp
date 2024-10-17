@@ -71,6 +71,12 @@ bool Scene::Update(float dt)
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		Engine::GetInstance().render.get()->camera.x += ceil(camSpeed * dt);
 
+	/*int targetCameraX = -player->position.getX() + Engine::GetInstance().window.get()->width/2 + 320;
+
+	Engine::GetInstance().render.get()->camera.x += (targetCameraX - Engine::GetInstance().render.get()->camera.x) * 0.1;*/
+
+
+
 	return true;
 }
 

@@ -43,8 +43,6 @@ bool Player::Start() {
 	state = State::IDLE;
 	facing = Facing::RIGHT;
 
-	printf("PlayerPosX: %d \n", position.getX());
-	printf("CirclePosX: %d \n", pbody->body->GetPosition().x);
 
 	return true;
 }
@@ -58,6 +56,7 @@ bool Player::Update(float dt)
 	TextureRendering();
 	CameraFollow(dt);
 	return true;
+
 }
 
 bool Player::CleanUp()
@@ -78,7 +77,7 @@ void Player::Walking(float dt)
 			Running(dt);
 			return;
 		}
-		velocity.x = -0.2 * dt;
+		velocity.x = -0.1 * dt;
 		state = State::WALKING;
 	}
 
@@ -89,7 +88,7 @@ void Player::Walking(float dt)
 			Running(dt);
 			return;
 		}
-		velocity.x = 0.2 * dt;
+		velocity.x = 0.1 * dt;
 		state = State::WALKING;
 	}
 	velocity.y = pbody->body->GetLinearVelocity().y;
@@ -105,7 +104,7 @@ void Player::Jumping(float dt)
 		if (canJump > 0)
 		{
 			state = State::JUMPING;
-			velocity.y = -0.3 * dt;
+			velocity.y = -0.2 * dt;
 			canJump--;
 			pbody->body->SetLinearVelocity(velocity);
 		}
@@ -118,11 +117,11 @@ void Player::Running(float dt)
 	b2Vec2 velocity = pbody->body->GetLinearVelocity();
 	if (facing == Facing::LEFT) 
 	{
-		velocity.x = 0.4f * dt;
+		velocity.x = 0.2f * dt;
 	}
 	else 
 	{
-		velocity.x = 0.4f * dt;
+		velocity.x = 0.2f * dt;
 	}
 
 	pbody->body->SetLinearVelocity(velocity);
@@ -144,11 +143,11 @@ void Player::Dashing(float dt)
 		currentTime -= dt;
 		if (facing == Facing::LEFT)
 		{
-			velocity.x = 1.0f * dt;
+			velocity.x = 0.50f * dt;
 		}
 		else
 		{
-			velocity.x = 1.0f * dt;
+			velocity.x = 0.50f * dt;
 		}
 		pbody->body->SetLinearVelocity(velocity);
 	}
@@ -183,11 +182,9 @@ void Player::SetPosition()
 	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - aniH / numTilesInMapX + tileSize/2);
 }
 
-void Player::CameraFollow(float dt) 
+void Player::CameraFollow(float dt)
 {
-	//No need for delta time because it is already implemented in horizontal velocity
-	Engine::GetInstance().render.get()->camera.x = Lerp(Engine::GetInstance().render.get()->camera.x,
-	-METERS_TO_PIXELS(pbody->body->GetPosition().x), 0.06f);
+	Engine::GetInstance().render.get()->camera.x = Lerp(Engine::GetInstance().render.get()->camera.x, -position.getX() * 3 + 200, 0.1f);
 }
 
 float Player::Lerp(float a, float b, float t)

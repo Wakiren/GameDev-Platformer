@@ -8,10 +8,10 @@ Implemented Features:
 - Double Jumping
 - Level Rendering
 - Dynamic Collisions
+- Working Camera 
 
 To do (in order of priority from most to least):
 - Player Walk/Jump/Die Animations *(MUST)*
-- Fix collision-related bug (low framerate when creating colliders)
 - Modify parameters from config files (ex. audio, pos...)
 - Confirm delta time is working
 - Debug functionalities

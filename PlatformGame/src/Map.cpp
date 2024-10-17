@@ -199,6 +199,7 @@ bool Map::Load(std::string path, std::string fileName)
                                 {
                                     PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangle(i * 16 + 8, j * 16 + 8, 14, 14, STATIC);
                                     c1->ctype = ColliderType::PLATFORM;
+                                    
                                 }
                             }
                         }
