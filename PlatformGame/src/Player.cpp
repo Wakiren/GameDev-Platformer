@@ -128,31 +128,35 @@ void Player::Running(float dt)
 	state = State::RUNNING;
 }
 
-void Player::Dashing(float dt) 
+void Player::Dashing(float dt)
 {
-
 	b2Vec2 velocity = pbody->body->GetLinearVelocity();
+
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
 	{
 		activateTimer = true;
 		currentTime = dashDuration;
 	}
 
-	if (activateTimer && currentTime > 0) 
+	if (activateTimer && currentTime > 0)
 	{
 		currentTime -= dt;
-		if (facing == Facing::LEFT)
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			velocity.x = -0.50f * dt;
+		}
+		else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
 			velocity.x = 0.50f * dt;
 		}
-		else
-		{
-			velocity.x = 0.50f * dt;
-		}
+
 		pbody->body->SetLinearVelocity(velocity);
 	}
+
 	state = State::DASHING;
 }
+
 
 void Player:: TextureRendering()
 {
