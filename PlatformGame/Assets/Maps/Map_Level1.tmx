@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="211" height="14" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="3">
  <tileset firstgid="1" name="monochrome_tilemap_transparent_torch_modified" tilewidth="16" tileheight="16" spacing="1" tilecount="400" columns="20">
-  <image source="monochrome_tilemap_transparent_torch_modified.png" width="339" height="339"/>
+  <image source="1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" width="339" height="339"/>
   <tile id="136">
    <animation>
     <frame tileid="131" duration="400"/>
@@ -17,6 +17,10 @@
   </tile>
  </tileset>
  <layer id="1" name="Collision_Layer" width="211" height="14">
+  <properties>
+   <property name="Colision" type="bool" value="true"/>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile gid="217"/>
    <tile/>
@@ -2975,6 +2979,9 @@
   </data>
  </layer>
  <layer id="2" name="Non_Collision_Layer" width="211" height="14">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
