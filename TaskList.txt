@@ -12,5 +12,6 @@ Francisco Javier Pedreño:
 
 Li Zhehao:
 - Level 1 Tilemap
+- Fixed bug of dashing
 
 Alba Fernández Hernández:
