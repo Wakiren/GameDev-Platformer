@@ -2,8 +2,6 @@
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
-#include "box2d/box2d.h"
-#include "Animation.h"
 
 struct SDL_Texture;
 
@@ -63,12 +61,8 @@ public:
 
 	// L08 TODO 6: Define OnCollision function for the player. 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
-	void SetParameters(pugi::xml_node parameters) {
-		this->parameters = parameters;
-	}
+
 	float x, y;
-
-
 
 public:
 
@@ -89,9 +83,5 @@ public:
 
 	// L08 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
-
-	pugi::xml_node parameters;
-	Animation* currentAnimation = nullptr;
-	Animation idle;
-	
+	PhysBody* pbodyFoot;
 };

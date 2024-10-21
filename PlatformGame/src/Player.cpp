@@ -18,26 +18,44 @@ Player::~Player() {
 }
 
 bool Player::Awake() {
-	position = Vector2D(30, 80);
+	//L03: TODO 2: Initialize Player parameters
+	position = Vector2D(64, 0);
 	return true;
 }
 
 bool Player::Start() {
 
+	//L03: TODO 2: Initialize Player parameters
+	//texture = Engine::GetInstance().textures.get()->Load("Assets/Textures/player1.png");
+
 	animations = Engine::GetInstance().textures.get()->Load("Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png");
 
+	// L08 TODO 5: Add physics to the player - initialize physics body
 	Engine::GetInstance().textures.get()->GetSize(animations, aniW, aniH);
-
 	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20 / 2, bodyType::DYNAMIC);
 
+	// L08 TODO 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
 
+	// L08 TODO 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
 
 	state = State::IDLE;
 	facing = Facing::RIGHT;
 
-	pbody->body->GetFixtureList()->SetFriction(0);
+	b2PolygonShape sensorShape;
+	sensorShape.SetAsBox(0.03f, 0.01f, b2Vec2(0, 0.2f), 0);
+
+	b2FixtureDef sensorFixtureDef;
+	sensorFixtureDef.shape = &sensorShape;
+	sensorFixtureDef.isSensor = true;
+	sensorFixtureDef.userData.pointer = (uintptr_t)ColliderType::FOOT_SENSOR;
+
+	pbody->body->CreateFixture(&sensorFixtureDef);
+
+	pbody->body->SetFixedRotation(true);
+
+
 	return true;
 }
 
@@ -56,6 +74,7 @@ bool Player::Update(float dt)
 bool Player::CleanUp()
 {
 	LOG("Cleanup player");
+	//Engine::GetInstance().textures.get()->UnLoad(texture);
 	Engine::GetInstance().textures.get()->UnLoad(animations);
 	return true;
 }
@@ -110,7 +129,7 @@ void Player::Running(float dt)
 	b2Vec2 velocity = pbody->body->GetLinearVelocity();
 	if (facing == Facing::LEFT) 
 	{
-		velocity.x = -0.2f * dt;
+		velocity.x = 0.2f * dt;
 	}
 	else 
 	{
@@ -166,6 +185,7 @@ void Player:: TextureRendering()
 	frame.w = tileSize;
 	frame.h = tileSize;
 
+	//Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
 	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8, (int)position.getY() + 4 ,&frame,1.0f, 0.0f, frame.w/2, frame.h/2, 1);
 }
 
@@ -192,8 +212,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
-		canJump = 2;
+		if (physA->body->GetFixtureList()->IsSensor() == true)
+		{
+			LOG("Foot sensor on platform, can jump");
+			canJump = 2;
+		}
 		break;
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
