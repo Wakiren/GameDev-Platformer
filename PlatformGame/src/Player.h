@@ -40,6 +40,8 @@ public:
 	float Lerp(float a, float b, float t);
 
 	int canJump = 0;
+	
+	void RayCast();
 
 	enum class State
 	{

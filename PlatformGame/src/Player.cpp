@@ -7,7 +7,9 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+#include <iostream>
 
+using namespace std;
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name = "Player";
@@ -69,6 +71,7 @@ bool Player::Update(float dt)
 	SetPosition();
 	TextureRendering();
 	CameraFollow(dt);
+	RayCast();
 	return true;
 
 }
@@ -207,19 +210,72 @@ void Player::CameraFollow(float dt)
 
 float Player::Lerp(float a, float b, float t)
 {
-		return a + t * (b - a);
+	return a + t * (b - a);
+}
+
+void Player::RayCast()
+{
+	float rayLength = 20.0f; // Increase the ray length
+
+	b2Transform transform;
+	transform.SetIdentity();
+
+	// Start ray from player's position
+	b2Vec2 rayStart = pbody->body->GetPosition();
+	// End ray pointing downward
+	b2Vec2 rayEnd = rayStart + b2Vec2(0, -rayLength);
+
+	b2RayCastOutput output;
+	b2RayCastInput input;
+	input.p1 = rayStart;
+	input.p2 = rayEnd;
+
+	// Check the player's fixtures for a raycast hit
+	bool hitGround = false;
+	for (b2Fixture* fixture = pbody->body->GetFixtureList(); fixture; fixture = fixture->GetNext())
+	{
+		// Perform the raycast for each fixture
+		if (fixture->GetShape()->RayCast(&output, input, transform, 0))
+		{
+			// Check if the hit is valid (you may want to add additional logic here)
+			if (output.fraction < 20.0f) // Ensure the hit was before the ray end
+			{
+				hitGround = true;
+				break; // Exit if we have found a valid hit
+			}
+		}
+	}
+
+	if (hitGround)
+	{
+		cout << "canJump";
+	}
+	else
+	{
+		cout << "cannotJump"; // Optional: notify when cannot jump
+	}
 }
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
-	case ColliderType::PLATFORM:
-		if (physA->body->GetFixtureList()->IsSensor() == true)
-		{
+	case ColliderType::PLATFORM: {
+		//if (physA->body->GetFixtureList()->IsSensor() == true)
+		//{
+		//	LOG("Foot sensor on platform, can jump");
+		//	canJump = 2;
+		//}
+		b2WorldManifold worldManifold;
+		physA->body->GetContactList()->contact->GetWorldManifold(&worldManifold); // Gets the collision normal
+		b2Vec2 normal = worldManifold.normal;
+		if (normal.y > -0.9f) { // This means the surface is below the player (ground)
 			LOG("Foot sensor on platform, can jump");
-			canJump = 2;
+			canJump = 2; // Allow jump reset
 		}
+
+
 		break;
+	}
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
 		break;
