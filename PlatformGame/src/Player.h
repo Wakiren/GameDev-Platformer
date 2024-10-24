@@ -37,9 +37,13 @@ public:
 
 	void CameraFollow(float dt);
 
+	void AnimationManager();
+
 	float Lerp(float a, float b, float t);
 
 	int canJump = 0;
+
+	bool onFloor;
 	
 	void RayCast();
 
@@ -87,6 +91,7 @@ public:
 	//Audio fx
 	int pickCoinFxId;
 	pugi::xml_node parameters;
+
 	Animation* currentAnimation = nullptr;
 	Animation idle;
 	// L08 TODO 5: Add physics to the player - declare a Physics body

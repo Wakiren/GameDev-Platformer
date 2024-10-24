@@ -19,26 +19,20 @@
     <fullscreen_window value="false"/>
   </window>
 
+
   <scene>
     <map path="Assets/Maps/" name="Map_Level1.tmx"/>
+    <entities>
+      <player x="96" y="96" w="16" h ="16" texture="Assets/Maps/1-bitPack/TileMap/monochrome_tilemap_transparent_torch_modified.png">
+        <animations>
+          <idle loop="true" speed ="0.5">
+            <frame x="0" y="16" w="16" h="16"/>
+            <frame x="0" y="0" w="16" h="16"/>
+          </idle>
+        </animations>
+      </player>
+    </entities>
   </scene>
 
-  <entities>
-	  <player x="600" y="1700" w="16" h ="16" speed="7.0" texturepath="Assets/Textures/Idle.png">
-		<animations>
-			<Idle loop="true" speed ="0.5">
-				<frame x="0" y="32" w="32" h="32"/>
-				<frame x="32" y="32" w="32" h="32"/>
-				<frame x="64" y="32" w="32" h="32"/>
-				<frame x="96" y="32" w="32" h="32"/>
-				<frame x="128" y="32" w="32" h="32"/>
-				<frame x="160" y="32" w="32" h="32"/>
-				<frame x="192" y="32" w="32" h="32"/>
-				<frame x="224" y="32" w="32" h="32"/>
-				<frame x="256" y="32" w="32" h="32"/>
-			</Idle>
-		</animations>
-	  </player>
-  </entities>
-	
+
 </config>

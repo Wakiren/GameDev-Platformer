@@ -34,7 +34,10 @@ bool Player::Start() {
 
 	// L08 TODO 5: Add physics to the player - initialize physics body
 	Engine::GetInstance().textures.get()->GetSize(animations, aniW, aniH);
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20 / 2, bodyType::DYNAMIC);
+	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20 / 2.5, bodyType::DYNAMIC);
+
+	idle.LoadAnimations(parameters.child("animations").child("idle"));
+	currentAnimation = &idle;
 
 	// L08 TODO 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -71,6 +74,7 @@ bool Player::Update(float dt)
 	SetPosition();
 	TextureRendering();
 	CameraFollow(dt);
+	AnimationManager();
 	RayCast();
 	return true;
 
@@ -97,8 +101,8 @@ void Player::Walking(float dt)
 		velocity.x = -0.1 * dt;
 		state = State::WALKING;
 	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
+	{
 		facing = Facing::RIGHT;
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		{
@@ -107,6 +111,13 @@ void Player::Walking(float dt)
 		}
 		velocity.x = 0.1 * dt;
 		state = State::WALKING;
+	}
+	else 
+	{
+		if (onFloor && state != State::DIED && state != State::DASHING)
+		{
+			state = State::IDLE;
+		}
 	}
 	velocity.y = pbody->body->GetLinearVelocity().y;
 	pbody->body->SetLinearVelocity(velocity);
@@ -167,11 +178,11 @@ void Player::Dashing(float dt)
 		{
 			velocity.x = 0.50f * dt;
 		}
-
+		state = State::DASHING;
 		pbody->body->SetLinearVelocity(velocity);
 	}
 
-	state = State::DASHING;
+
 }
 
 
@@ -190,8 +201,8 @@ void Player:: TextureRendering()
 	frame.w = tileSize;
 	frame.h = tileSize;
 
-	//Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY());
-	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8, (int)position.getY() + 4 ,&frame,1.0f, 0.0f, frame.w/2, frame.h/2, 1);
+	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8, 
+	(int)position.getY() + 2, &currentAnimation->GetCurrentFrame(),1.0f, 0.0f, frame.w/2, frame.h/2, 1);
 }
 
 void Player::SetPosition() 
@@ -215,14 +226,12 @@ float Player::Lerp(float a, float b, float t)
 
 void Player::RayCast()
 {
-	float rayLength = 20.0f; // Increase the ray length
+	float rayLength = 20.0f; 
 
 	b2Transform transform;
 	transform.SetIdentity();
 
-	// Start ray from player's position
 	b2Vec2 rayStart = pbody->body->GetPosition();
-	// End ray pointing downward
 	b2Vec2 rayEnd = rayStart + b2Vec2(0, -rayLength);
 
 	b2RayCastOutput output;
@@ -230,19 +239,15 @@ void Player::RayCast()
 	input.p1 = rayStart;
 	input.p2 = rayEnd;
 
-	// Check the player's fixtures for a raycast hit
 	bool hitGround = false;
 	for (b2Fixture* fixture = pbody->body->GetFixtureList(); fixture; fixture = fixture->GetNext())
 	{
-		// Perform the raycast for each fixture
 		if (fixture->GetShape()->RayCast(&output, input, transform, 0))
 		{
-			// Check if the hit is valid (you may want to add additional logic here)
-			if (output.fraction < 20.0f) // Ensure the hit was before the ray end
-			{
+			
 				hitGround = true;
-				break; // Exit if we have found a valid hit
-			}
+				break; 
+			
 		}
 	}
 
@@ -250,29 +255,60 @@ void Player::RayCast()
 	{
 		cout << "canJump";
 	}
-	else
-	{
-		cout << "cannotJump"; // Optional: notify when cannot jump
-	}
+
 }
+
+void Player::AnimationManager()
+{
+	switch (state)
+	{
+	case Player::State::IDLE:
+		idle.LoadAnimations(parameters.child("animations").child("idle"));
+		currentAnimation = &idle;
+		currentAnimation->Update();
+		cout << "aaa";
+		break;
+	case Player::State::WALKING:
+
+		break;
+	case Player::State::RUNNING:
+
+		break;
+	case Player::State::JUMPING:
+
+		break;
+	case Player::State::DASHING:
+
+		break;
+	case Player::State::CLIMBING:
+
+		break;
+	case Player::State::FALLING:
+
+		break;
+	case Player::State::DIED:
+
+		break;
+	default:
+		break;
+	}
+
+	//std::cout << static_cast<std::underlying_type<State>::type>(state) << std::endl;
+
+}
+
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM: {
-		//if (physA->body->GetFixtureList()->IsSensor() == true)
-		//{
-		//	LOG("Foot sensor on platform, can jump");
-		//	canJump = 2;
-		//}
-		b2WorldManifold worldManifold;
-		physA->body->GetContactList()->contact->GetWorldManifold(&worldManifold); // Gets the collision normal
-		b2Vec2 normal = worldManifold.normal;
-		if (normal.y > -0.9f) { // This means the surface is below the player (ground)
-			LOG("Foot sensor on platform, can jump");
-			canJump = 2; // Allow jump reset
-		}
 
+		if (physA->body->GetFixtureList()->IsSensor() == true)
+		{
+			LOG("Foot sensor on platform, can jump");
+			canJump = 2;
+			onFloor = true;
+		}
 
 		break;
 	}

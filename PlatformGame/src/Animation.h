@@ -61,8 +61,7 @@ public:
 			PushBack({ animation.attribute("x").as_int(),
 						animation.attribute("y").as_int(),
 						animation.attribute("w").as_int(),
-						animation.attribute("h").as_int() 
-					});
+						animation.attribute("h").as_int() });
 		}
 
 	}
