@@ -27,9 +27,7 @@ bool Player::Awake() {
 
 bool Player::Start() {
 
-	//L03: TODO 2: Initialize Player parameters
-	//texture = Engine::GetInstance().textures.get()->Load("Assets/Textures/player1.png");
-
+	animations = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
 	animations = Engine::GetInstance().textures.get()->Load("Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png");
 
 	// L08 TODO 5: Add physics to the player - initialize physics body
@@ -62,7 +60,7 @@ bool Player::Start() {
 
 	pbody->body->SetFixedRotation(true);
 
-
+	cout << "AAAAAAAAAAA:" << parameters.attribute("texture").as_string();
 	return true;
 }
 
@@ -201,8 +199,8 @@ void Player:: TextureRendering()
 	frame.w = tileSize;
 	frame.h = tileSize;
 
-	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8, 
-	(int)position.getY() + 2, &currentAnimation->GetCurrentFrame(),1.0f, 0.0f, frame.w/2, frame.h/2, 1);
+	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8,(int)position.getY() + 2, &currentAnimation->GetCurrentFrame());
+	currentAnimation->Update();
 }
 
 void Player::SetPosition() 
@@ -265,7 +263,6 @@ void Player::AnimationManager()
 	case Player::State::IDLE:
 		idle.LoadAnimations(parameters.child("animations").child("idle"));
 		currentAnimation = &idle;
-		currentAnimation->Update();
 		cout << "aaa";
 		break;
 	case Player::State::WALKING:
