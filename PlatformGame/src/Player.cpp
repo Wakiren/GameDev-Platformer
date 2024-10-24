@@ -43,6 +43,8 @@ bool Player::Start() {
 	state = State::IDLE;
 	facing = Facing::RIGHT;
 
+	pbody->body->GetFixtureList()->SetFriction(0);
+
 	b2PolygonShape sensorShape;
 	sensorShape.SetAsBox(0.03f, 0.01f, b2Vec2(0, 0.2f), 0);
 
