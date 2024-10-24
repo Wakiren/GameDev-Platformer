@@ -131,7 +131,7 @@ void Player::Running(float dt)
 	b2Vec2 velocity = pbody->body->GetLinearVelocity();
 	if (facing == Facing::LEFT) 
 	{
-		velocity.x = 0.2f * dt;
+		velocity.x = -0.2f * dt;
 	}
 	else 
 	{
