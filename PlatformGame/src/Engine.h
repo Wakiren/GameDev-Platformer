@@ -97,7 +97,9 @@ public:
 	// L08: TODO 2: Add Physics module
 	std::shared_ptr<Physics> physics;
 
-
+	float GetDt() const {
+		return dt;
+	}
 private: 
 
 	// Delta time
@@ -125,4 +127,5 @@ private:
 
 	//L05 TODO 2: Declare a xml_document to load the config file
 	pugi::xml_document configFile;
+
 };

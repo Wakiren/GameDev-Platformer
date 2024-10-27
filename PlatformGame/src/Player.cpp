@@ -93,10 +93,10 @@ void Player::Walking(float dt)
 		facing = Facing::LEFT;
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) 
 		{
-			Running(dt);
+			Running(16);
 			return;
 		}
-		velocity.x = -0.1 * dt;
+		velocity.x = -0.1 * 16;
 		state = State::WALKING;
 	}
 	else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
@@ -104,10 +104,10 @@ void Player::Walking(float dt)
 		facing = Facing::RIGHT;
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		{
-			Running(dt);
+			Running(16);
 			return;
 		}
-		velocity.x = 0.1 * dt;
+		velocity.x = 0.1 * 16;
 		state = State::WALKING;
 	}
 	else 
@@ -130,7 +130,7 @@ void Player::Jumping(float dt)
 		if (canJump > 0)
 		{
 			state = State::JUMPING;
-			velocity.y = -0.2 * dt;
+			velocity.y = -0.2 * 16;
 			canJump--;
 			pbody->body->SetLinearVelocity(velocity);
 		}
@@ -143,11 +143,11 @@ void Player::Running(float dt)
 	b2Vec2 velocity = pbody->body->GetLinearVelocity();
 	if (facing == Facing::LEFT) 
 	{
-		velocity.x = -0.2f * dt;
+		velocity.x = -0.2f * 16;
 	}
 	else 
 	{
-		velocity.x = 0.2f * dt;
+		velocity.x = 0.2f * 16;
 	}
 
 	pbody->body->SetLinearVelocity(velocity);
@@ -170,11 +170,11 @@ void Player::Dashing(float dt)
 
 		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
-			velocity.x = -0.50f * dt;
+			velocity.x = -0.50f * 16;
 		}
 		else if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
-			velocity.x = 0.50f * dt;
+			velocity.x = 0.50f * 16;
 		}
 		state = State::DASHING;
 		pbody->body->SetLinearVelocity(velocity);
