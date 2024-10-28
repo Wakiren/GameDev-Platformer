@@ -69,6 +69,8 @@ private:
 	// Load config file
 	bool LoadConfig();
 
+	void ChangeFrameRate();
+
 	std::list<std::shared_ptr<Module>> moduleList;
 
 public:

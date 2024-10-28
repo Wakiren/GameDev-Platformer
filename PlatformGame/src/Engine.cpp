@@ -128,6 +128,8 @@ bool Engine::Update() {
     bool ret = true;
     PrepareUpdate();
 
+    ChangeFrameRate();
+
     if (input->GetWindowEvent(WE_QUIT) == true)
         ret = false;
 
@@ -164,6 +166,21 @@ bool Engine::CleanUp() {
     LOG("Timer App CleanUp(): %f", timer.ReadMSec());
 
     return result;
+}
+
+void Engine::ChangeFrameRate()
+{
+    if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F11) == KEY_DOWN))
+    {
+        if (maxFrameDuration == configFile.child("config").child("engine").child("maxFrameDuration").attribute("value").as_int())
+        {
+            maxFrameDuration = 32;
+        }
+        else
+        {
+            maxFrameDuration = configFile.child("config").child("engine").child("maxFrameDuration").attribute("value").as_int();
+        }
+    }
 }
 
 // ---------------------------------------------

@@ -60,7 +60,7 @@ bool Player::Start() {
 
 	pbody->body->SetFixedRotation(true);
 
-	cout << "AAAAAAAAAAA:" << parameters.attribute("texture").as_string();
+	//cout << "AAAAAAAAAAA:" << parameters.attribute("texture").as_string();
 	return true;
 }
 
@@ -263,7 +263,6 @@ void Player::AnimationManager()
 	case Player::State::IDLE:
 		idle.LoadAnimations(parameters.child("animations").child("idle"));
 		currentAnimation = &idle;
-		cout << "aaa";
 		break;
 	case Player::State::WALKING:
 
@@ -289,8 +288,6 @@ void Player::AnimationManager()
 	default:
 		break;
 	}
-
-	//std::cout << static_cast<std::underlying_type<State>::type>(state) << std::endl;
 
 }
 
