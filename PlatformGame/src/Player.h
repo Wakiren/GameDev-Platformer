@@ -47,6 +47,9 @@ public:
 	
 	void RayCast();
 
+	void GodMode();
+	bool godMode;
+
 	enum class State
 	{
 		IDLE,

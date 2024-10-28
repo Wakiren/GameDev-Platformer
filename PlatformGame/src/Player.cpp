@@ -59,8 +59,6 @@ bool Player::Start() {
 	pbody->body->CreateFixture(&sensorFixtureDef);
 
 	pbody->body->SetFixedRotation(true);
-
-	//cout << "AAAAAAAAAAA:" << parameters.attribute("texture").as_string();
 	return true;
 }
 
@@ -74,6 +72,7 @@ bool Player::Update(float dt)
 	CameraFollow(dt);
 	AnimationManager();
 	RayCast();
+	GodMode();
 	return true;
 
 }
@@ -288,6 +287,36 @@ void Player::AnimationManager()
 	default:
 		break;
 	}
+
+}
+
+void Player::GodMode() 
+{
+	b2Vec2 velocity = pbody->body->GetLinearVelocity();
+	if((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F10) == KEY_DOWN))
+	{
+		godMode = !godMode;
+
+	}
+	if(godMode)
+	{
+		pbody->body->SetGravityScale(0);
+
+		if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT))
+		{
+			velocity.y = -0.2f * 16;
+		}
+		if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT))
+		{
+			velocity.y = 0.2f * 16;
+		}
+		pbody->body->SetLinearVelocity(velocity);
+	}
+	else 
+	{
+		pbody->body->SetGravityScale(1);
+	}
+
 
 }
 
