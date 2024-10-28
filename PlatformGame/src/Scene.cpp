@@ -30,6 +30,7 @@ bool Scene::Awake()
 
 	//L04: TODO 3b: Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
+	player->SetParameters(configParameters.child("entities").child("player"));
 	player->position = Vector2D(256, 256);
 	
 	//L08 Create a new item using the entity manager and set the position to (200, 672) to test
@@ -42,7 +43,8 @@ bool Scene::Awake()
 bool Scene::Start()
 {
 	//L06 TODO 3: Call the function to load the map. 
-	Engine::GetInstance().map->Load("Assets/Maps/", "Map_Level1.tmx");
+	//Engine::GetInstance().map->Load( "Assets/Maps/", "Map_Level1.tmx");
+	Engine::GetInstance().map->Load(configParameters.child("map").attribute("path").as_string(), configParameters.child("map").attribute("name").as_string());
 
 	return true;
 }

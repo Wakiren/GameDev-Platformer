@@ -21,18 +21,22 @@ Player::~Player() {
 
 bool Player::Awake() {
 	//L03: TODO 2: Initialize Player parameters
-	position = Vector2D(30, 80);
+	position = Vector2D(0,0);
 	return true;
 }
 
 bool Player::Start() {
 
 	animations = Engine::GetInstance().textures.get()->Load(parameters.attribute("texture").as_string());
-	animations = Engine::GetInstance().textures.get()->Load("Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png");
+
+	position.setX(parameters.attribute("x").as_int());
+	position.setY(parameters.attribute("y").as_int());
+	texW = parameters.attribute("w").as_int();
+	texH = parameters.attribute("h").as_int();
 
 	// L08 TODO 5: Add physics to the player - initialize physics body
 	Engine::GetInstance().textures.get()->GetSize(animations, aniW, aniH);
-	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 20 / 2.5, bodyType::DYNAMIC);
+	pbody = Engine::GetInstance().physics.get()->CreateCircle((int)position.getX(), (int)position.getY(), aniW / 8 / 2, bodyType::DYNAMIC);
 
 	idle.LoadAnimations(parameters.child("animations").child("idle"));
 	currentAnimation = &idle;
@@ -128,13 +132,11 @@ void Player::Jumping(float dt)
 	{
 		if (canJump > 0)
 		{
-			state = State::JUMPING;
 			velocity.y = -0.2 * 16;
 			canJump--;
 			pbody->body->SetLinearVelocity(velocity);
 		}
 	}
-
 }
 
 void Player::Running(float dt) 
@@ -198,8 +200,7 @@ void Player:: TextureRendering()
 	frame.w = tileSize;
 	frame.h = tileSize;
 
-	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() + 8,(int)position.getY() + 2, &currentAnimation->GetCurrentFrame());
-	currentAnimation->Update();
+
 }
 
 void Player::SetPosition() 
@@ -264,13 +265,32 @@ void Player::AnimationManager()
 		currentAnimation = &idle;
 		break;
 	case Player::State::WALKING:
+		if (facing == Facing::RIGHT) 
+		{
+			walkingright.LoadAnimations(parameters.child("animations").child("walkingright"));
+			currentAnimation = &walkingright;
+		}
+		else 
+		{
+			walkingleft.LoadAnimations(parameters.child("animations").child("walkingleft"));
+			currentAnimation = &walkingleft;
+		}
 
 		break;
 	case Player::State::RUNNING:
 
 		break;
 	case Player::State::JUMPING:
-
+		if (facing == Facing::RIGHT)
+		{
+			jumpingright.LoadAnimations(parameters.child("animations").child("jumpingright"));
+			currentAnimation = &jumpingright;
+		}
+		else
+		{
+			jumpingleft.LoadAnimations(parameters.child("animations").child("jumpingleft"));
+			currentAnimation = &jumpingleft;
+		}
 		break;
 	case Player::State::DASHING:
 
@@ -287,7 +307,8 @@ void Player::AnimationManager()
 	default:
 		break;
 	}
-
+	Engine::GetInstance().render.get()->DrawTexture(animations, (int)position.getX() - 3, (int)position.getY() - 16, &currentAnimation->GetCurrentFrame());
+	currentAnimation->Update();
 }
 
 void Player::GodMode() 
@@ -342,6 +363,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision UNKNOWN");
 		break;
 	default:
+		state = State::JUMPING;
 		break;
 	}
 }
