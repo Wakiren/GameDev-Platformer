@@ -349,7 +349,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 		if (physA->body->GetFixtureList()->IsSensor() == true)
 		{
-			LOG("Foot sensor on platform, can jump");
 			canJump = 2;
 			onFloor = true;
 		}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="211" height="14" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="211" height="14" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="3">
  <tileset firstgid="1" name="monochrome_tilemap_transparent_torch_modified" tilewidth="16" tileheight="16" spacing="1" tilecount="400" columns="20">
   <image source="1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" width="339" height="339"/>
   <tile id="136">
@@ -866,8 +866,8 @@
    <tile/>
    <tile gid="292"/>
    <tile/>
-   <tile gid="317"/>
-   <tile gid="317"/>
+   <tile/>
+   <tile/>
    <tile gid="317"/>
    <tile gid="318"/>
    <tile/>
@@ -1078,7 +1078,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="218"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1289,7 +1289,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="218"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1498,9 +1498,9 @@
    <tile gid="237"/>
    <tile gid="237"/>
    <tile gid="237"/>
-   <tile gid="237"/>
    <tile/>
    <tile/>
+   <tile gid="218"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1695,9 +1695,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="39"/>
-   <tile/>
-   <tile gid="55"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1712,6 +1709,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="216"/>
+   <tile/>
+   <tile gid="218"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1795,7 +1795,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="187"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -1920,9 +1920,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="216"/>
    <tile/>
-   <tile gid="272"/>
-   <tile gid="272"/>
+   <tile/>
    <tile gid="272"/>
    <tile gid="272"/>
    <tile gid="272"/>
@@ -2006,7 +2006,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="205"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2125,13 +2125,13 @@
    <tile gid="272"/>
    <tile gid="273"/>
    <tile/>
-   <tile gid="18"/>
-   <tile gid="19"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile gid="216"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2217,7 +2217,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="206"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2342,7 +2342,7 @@
    <tile gid="272"/>
    <tile gid="272"/>
    <tile gid="272"/>
-   <tile gid="272"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -4460,7 +4460,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="16"/>
+   <tile/>
    <tile/>
    <tile gid="205"/>
    <tile/>
@@ -4657,6 +4657,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="39"/>
+   <tile/>
+   <tile gid="55"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4669,9 +4672,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile gid="20"/>
-   <tile gid="36"/>
    <tile/>
    <tile gid="206"/>
    <tile/>
@@ -4756,7 +4756,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="187"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4881,7 +4881,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="40"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4968,6 +4967,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="205"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5087,8 +5087,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="18"/>
+   <tile gid="19"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5177,8 +5177,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="18"/>
    <tile/>
+   <tile gid="206"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5940,6 +5940,9 @@
   </data>
  </layer>
  <layer id="5" name="Doors" width="211" height="14">
+  <properties>
+   <property name="Draw" type="bool" value="true"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
