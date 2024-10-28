@@ -9,6 +9,9 @@ Francisco Javier Pedreño:
 - Implemented Camera Follow
 - Implemented Level 
 - Implemented Dynamic Collisions
+- Made Physics independent from frame rate
+- Implemented Animations
+- F9 and F11 Debug Keys
 
 Li Zhehao:
 - Level 1 Tilemap
