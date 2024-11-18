@@ -3,15 +3,16 @@
 #include "Entity.h"
 #include "SDL2/SDL.h"
 #include "Animation.h"
+#include "Pathfinding.h"
 
 struct SDL_Texture;
 
-class Item : public Entity
+class Enemy : public Entity
 {
 public:
 
-	Item();
-	virtual ~Item();
+	Enemy();
+	virtual ~Enemy();
 
 	bool Awake();
 
@@ -25,9 +26,13 @@ public:
 		this->parameters = parameters;
 	}
 
-public:
+	void SetPosition(Vector2D pos);
 
-	bool isPicked = false;
+	Vector2D GetPosition();
+
+	void ResetPath();
+
+public:
 
 private:
 
@@ -37,7 +42,6 @@ private:
 	pugi::xml_node parameters;
 	Animation* currentAnimation = nullptr;
 	Animation idle;
-
-	//L08 TODO 4: Add a physics to an item
 	PhysBody* pbody;
+	Pathfinding* pathfinding;
 };

@@ -247,13 +247,41 @@ bool Map::Load(std::string path, std::string fileName)
     return ret;
 }
 
+
 // L07: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
 Vector2D Map::MapToWorld(int x, int y) const
 {
     Vector2D ret;
 
-    ret.setX(x * mapData.tileWidth);
-    ret.setY(y * mapData.tileHeight);
+    // L09: TODO 3: Get the screen coordinates of tile positions for isometric maps 
+    if (mapData.orientation == MapOrientation::ORTOGRAPHIC) {
+        ret.setX(x * mapData.tileWidth);
+        ret.setY(y * mapData.tileHeight);
+    }
+    else if (mapData.orientation == MapOrientation::ISOMETRIC) {
+        ret.setX(x * mapData.tileWidth / 2 - y * mapData.tileWidth / 2);
+        ret.setY(x * mapData.tileHeight / 2 + y * mapData.tileHeight / 2);
+    }
+
+    return ret;
+}
+
+// L10: TODO 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+Vector2D Map::WorldToMap(int x, int y) {
+
+    Vector2D ret(0, 0);
+
+    if (mapData.orientation == MapOrientation::ORTOGRAPHIC) {
+        ret.setX(x / mapData.tileWidth);
+        ret.setY(y / mapData.tileHeight);
+    }
+
+    if (mapData.orientation == MapOrientation::ISOMETRIC) {
+        float half_width = mapData.tileWidth / 2;
+        float half_height = mapData.tileHeight / 2;
+        ret.setX(int((x / half_width + y / half_height) / 2));
+        ret.setY(int((y / half_height - (x / half_width)) / 2));
+    }
 
     return ret;
 }
@@ -275,15 +303,25 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
     return ret;
 }
 
-// L09: TODO 7: Implement a method to get the value of a custom property
-Properties::Property* Properties::GetProperty(const char* name)
-{
-    for (const auto& property : propertyList) {
-        if (property->name == name) {
-			return property;
-		}
+MapLayer* Map::GetNavigationLayer() {
+    for (const auto& layer : mapData.layers) {
+        if (layer->properties.GetProperty("Navigation") != NULL &&
+            layer->properties.GetProperty("Navigation")->value) {
+            return layer;
+        }
     }
 
     return nullptr;
 }
 
+// L09: TODO 7: Implement a method to get the value of a custom property
+Properties::Property* Properties::GetProperty(const char* name)
+{
+    for (const auto& property : propertyList) {
+        if (property->name == name) {
+            return property;
+        }
+    }
+
+    return nullptr;
+}

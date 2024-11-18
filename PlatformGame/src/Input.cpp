@@ -27,7 +27,7 @@ bool Input::Awake()
 	bool ret = true;
 	SDL_Init(0);
 
-	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
+	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -50,75 +50,75 @@ bool Input::PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-	for(int i = 0; i < MAX_KEYS; ++i)
+	for (int i = 0; i < MAX_KEYS; ++i)
 	{
-		if(keys[i] == 1)
+		if (keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE)
 				keyboard[i] = KEY_DOWN;
 			else
 				keyboard[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
 				keyboard[i] = KEY_UP;
 			else
 				keyboard[i] = KEY_IDLE;
 		}
 	}
 
-	for(int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
+	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
 	{
-		if(mouseButtons[i] == KEY_DOWN)
+		if (mouseButtons[i] == KEY_DOWN)
 			mouseButtons[i] = KEY_REPEAT;
 
-		if(mouseButtons[i] == KEY_UP)
+		if (mouseButtons[i] == KEY_UP)
 			mouseButtons[i] = KEY_IDLE;
 	}
 
-	while(SDL_PollEvent(&event) != 0)
+	while (SDL_PollEvent(&event) != 0)
 	{
-		switch(event.type)
+		switch (event.type)
 		{
-			case SDL_QUIT:
-				windowEvents[WE_QUIT] = true;
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
 			break;
 
-			case SDL_WINDOWEVENT:
-				switch(event.window.event)
-				{
-					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
-					break;
+		case SDL_WINDOWEVENT:
+			switch (event.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
+				break;
 
-					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
-					break;
-				}
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
+				break;
+			}
 			break;
 
-			case SDL_MOUSEBUTTONDOWN:
-				mouseButtons[event.button.button - 1] = KEY_DOWN;
+		case SDL_MOUSEBUTTONDOWN:
+			mouseButtons[event.button.button - 1] = KEY_DOWN;
 			break;
 
-			case SDL_MOUSEBUTTONUP:
-				mouseButtons[event.button.button - 1] = KEY_UP;
+		case SDL_MOUSEBUTTONUP:
+			mouseButtons[event.button.button - 1] = KEY_UP;
 			break;
 
-			case SDL_MOUSEMOTION:
-				int scale = Engine::GetInstance().window.get()->GetScale();
-				mouseMotionX = event.motion.xrel / scale;
-				mouseMotionY = event.motion.yrel / scale;
-				mouseX = event.motion.x / scale;
-				mouseY = event.motion.y / scale;
+		case SDL_MOUSEMOTION:
+			int scale = Engine::GetInstance().window.get()->GetScale();
+			mouseMotionX = event.motion.xrel / scale;
+			mouseMotionY = event.motion.yrel / scale;
+			mouseX = event.motion.x / scale;
+			mouseY = event.motion.y / scale;
 			break;
 		}
 	}
@@ -140,14 +140,12 @@ bool Input::GetWindowEvent(EventWindow ev)
 	return windowEvents[ev];
 }
 
-void Input::GetMousePosition(int& x, int& y)
+Vector2D Input::GetMousePosition()
 {
-	x = mouseX;
-	y = mouseY;
+	return Vector2D(mouseX, mouseY);
 }
 
-void Input::GetMouseMotion(int& x, int& y)
+Vector2D Input::GetMouseMotion()
 {
-	x = mouseMotionX;
-	y = mouseMotionY;
+	return Vector2D(mouseMotionX, mouseMotionY);
 }

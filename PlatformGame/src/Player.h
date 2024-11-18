@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "box2d/box2d.h"
 #include "Animation.h"
+#include "Vector2D.h"
 
 struct SDL_Texture;
 
@@ -76,7 +77,9 @@ public:
 		this->parameters = parameters;
 	}
 	float x, y;
+	void SetPosition(Vector2D pos);
 
+	Vector2D GetPosition();
 public:
 
 	//Declare player parameters

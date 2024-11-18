@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Vector2D.h"
 #include "Module.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_rect.h"
@@ -59,8 +60,8 @@ public:
 	bool GetWindowEvent(EventWindow ev);
 
 	// Get mouse / axis position
-	void GetMousePosition(int &x, int &y);
-	void GetMouseMotion(int& x, int& y);
+	Vector2D GetMousePosition();
+	Vector2D GetMouseMotion();
 
 private:
 	bool windowEvents[WE_COUNT];
