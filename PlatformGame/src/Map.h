@@ -93,7 +93,7 @@ struct MapData
     int tileHeight;
     std::list<TileSet*> tilesets;
     // L10: TODO 2: Define a property to store the Map Orientation and Load it from the map
-    MapOrientation orientation;
+    MapOrientation orientation = MapOrientation::ORTOGRAPHIC;;
 
     // L07: TODO 2: Add the info to the MapLayer Struct
     std::list<MapLayer*> layers;

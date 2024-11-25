@@ -59,6 +59,7 @@ bool Map::Update(float dt)
                                 //Get the screen coordinates from the tile coordinates
                                 Vector2D mapCoord = MapToWorld(i, j);
                                 //Draw the texture
+                                printf("%f \n", mapCoord.getX());
                                 Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
                             }
                         }
@@ -135,7 +136,18 @@ bool Map::Load(std::string path, std::string fileName)
         mapData.tileHeight = mapFileXML.child("map").attribute("tileheight").as_int();
 
         // L06: TODO 4: Implement the LoadTileSet function to load the tileset properties
-       
+        std::string orientationStr = mapFileXML.child("map").attribute("orientation").as_string();
+        if (orientationStr == "orthogonal") {
+            mapData.orientation = MapOrientation::ORTOGRAPHIC;
+        }
+        else if (orientationStr == "isometric") {
+            mapData.orientation = MapOrientation::ISOMETRIC;
+        }
+        else {
+            LOG("Map orientation not found");
+            ret = false;
+        }
+
         //Iterate the Tileset
         for(pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode!=NULL; tilesetNode = tilesetNode.next_sibling("tileset"))
 		{
@@ -252,7 +264,7 @@ bool Map::Load(std::string path, std::string fileName)
 Vector2D Map::MapToWorld(int x, int y) const
 {
     Vector2D ret;
-
+    
     // L09: TODO 3: Get the screen coordinates of tile positions for isometric maps 
     if (mapData.orientation == MapOrientation::ORTOGRAPHIC) {
         ret.setX(x * mapData.tileWidth);
