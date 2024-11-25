@@ -46,6 +46,15 @@
           </jumpingleft>
         </animations>
       </player>
+      <enemies>
+        <enemy name="badguy" x="448" y="350" w="32" h="32" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="true">
+          <animations>
+            <idle loop="true" speed ="0.5">
+              <frame x="0" y="0" w="32" h="32"/>
+            </idle>
+          </animations>
+        </enemy>
+      </enemies>
     </entities>
   </scene>
 

@@ -103,7 +103,7 @@ bool Scene::Update(float dt)
 
 	//Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
 	Vector2D highlightTile = Engine::GetInstance().map.get()->MapToWorld(mouseTile.getX(), mouseTile.getY());
-	SDL_Rect rect = { 0,0,32,32 };
+	SDL_Rect rect = { 0,0,16,16 };
 	Engine::GetInstance().render.get()->DrawTexture(mouseTileTex,
 		highlightTile.getX(),
 		highlightTile.getY(),
@@ -117,6 +117,7 @@ bool Scene::Update(float dt)
 
 	//If mouse button is pressed modify enemy position
 	if (Engine::GetInstance().input.get()->GetMouseButtonDown(1) == KEY_DOWN) {
+		
 		enemyList[0]->SetPosition(Vector2D(highlightTile.getX(), highlightTile.getY()));
 		enemyList[0]->ResetPath();
 	}
