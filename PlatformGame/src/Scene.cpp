@@ -123,11 +123,11 @@ bool Scene::Update(float dt)
 	}
 
 
-	if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_0) == KEY_DOWN))
+	if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F5) == KEY_DOWN))
 	{
 		SaveState();
 	}
-	if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_1) == KEY_DOWN))
+	if ((Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_F6) == KEY_DOWN))
 	{
 		LoadState();
 	}

@@ -63,6 +63,10 @@ bool Player::Start() {
 	pbody->body->CreateFixture(&sensorFixtureDef);
 
 	pbody->body->SetFixedRotation(true);
+
+	//Sounds
+	jump = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.wav");
+
 	return true;
 }
 
@@ -133,6 +137,7 @@ void Player::Jumping(float dt)
 		if (canJump > 0)
 		{
 			velocity.y = -0.2 * 16;
+			Engine::GetInstance().audio.get()->PlayFx(jump);
 			canJump--;
 			pbody->body->SetLinearVelocity(velocity);
 		}

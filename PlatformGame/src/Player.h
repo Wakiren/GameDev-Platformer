@@ -96,6 +96,8 @@ public:
 
 	//Audio fx
 	int pickCoinFxId;
+	int jump;
+
 	pugi::xml_node parameters;
 
 	Animation* currentAnimation = nullptr;
