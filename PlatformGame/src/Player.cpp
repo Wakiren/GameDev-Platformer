@@ -283,7 +283,16 @@ void Player::AnimationManager()
 
 		break;
 	case Player::State::RUNNING:
-
+		if (facing == Facing::RIGHT)
+		{
+			walkingright.LoadAnimations(parameters.child("animations").child("walkingright"));
+			currentAnimation = &walkingright;
+		}
+		else
+		{
+			walkingleft.LoadAnimations(parameters.child("animations").child("walkingleft"));
+			currentAnimation = &walkingleft;
+		}
 		break;
 	case Player::State::JUMPING:
 		if (facing == Facing::RIGHT)
@@ -362,6 +371,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	}
 	case ColliderType::ITEM:
 		LOG("Collision ITEM");
+		break;
+	case ColliderType::ENEMY:
+		LOG("Collision ENEMY");
+		Engine::GetInstance().scene.get()->LoadState();
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
