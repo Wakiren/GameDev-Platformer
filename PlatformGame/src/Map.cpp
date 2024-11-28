@@ -212,6 +212,13 @@ bool Map::Load(std::string path, std::string fileName)
                                     c1->ctype = ColliderType::PLATFORM;
                                     
                                 }
+                                if (mapLayer->properties.GetProperty("CheckPoint") != NULL && mapLayer->properties.GetProperty("CheckPoint")->value == true)
+                                {
+                                    PhysBody* c1 = Engine::GetInstance().physics.get()->CreateRectangleSensor(i * 16 + 8, j * 16 + 8, 14, 14, STATIC);
+                                    c1->ctype = ColliderType::CHECKPOINT;
+
+                                }
+
                             }
                         }
                     }

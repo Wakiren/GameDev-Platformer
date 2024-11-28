@@ -17,7 +17,7 @@
 	<scene>
 		<map path="Assets/Maps/" name="Map_Level1.tmx" />
 		<entities>
-      <!--x 60 y 90-->
+			<!-- 60 90-->
 			<player x="60" y="90" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/PlayerAnimations.png">
 				<animations>
 					<idle loop="true" speed="0.1">

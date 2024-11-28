@@ -366,6 +366,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
+	case ColliderType::CHECKPOINT:
+		Engine::GetInstance().scene.get()->SaveState();
+		break;
 	default:
 		state = State::JUMPING;
 		break;

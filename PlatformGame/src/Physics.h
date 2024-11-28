@@ -28,7 +28,8 @@ enum class ColliderType {
 	PLATFORM, 
 	FOOT_SENSOR,
 	UNKNOWN,
-	ENEMY
+	ENEMY,
+	CHECKPOINT
 	// ..
 };
 

@@ -93,7 +93,41 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 
 	return pbody;
 }
+PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type)
+{
+	// Create BODY at position x,y
+	b2BodyDef body;
+	if (type == DYNAMIC) body.type = b2_dynamicBody;
+	if (type == STATIC) body.type = b2_staticBody;
+	if (type == KINEMATIC) body.type = b2_kinematicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
+	// Add BODY to the world
+	b2Body* b = world->CreateBody(&body);
+
+	// Create SHAPE
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	// Create FIXTURE
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+	fixture.isSensor = true;
+
+	// Add fixture to the BODY
+	b->CreateFixture(&fixture);
+
+	// Create our custom PhysBody class
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->GetUserData().pointer = (uintptr_t)pbody;
+	pbody->width = width;
+	pbody->height = height;
+
+	// Return our PhysBody class
+	return pbody;
+}
 PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 {
 	// Create BODY at position x,y
@@ -132,41 +166,7 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 	return pbody;
 }
 
-PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type)
-{
-	// Create BODY at position x,y
-	b2BodyDef body;
-	if (type == DYNAMIC) body.type = b2_dynamicBody;
-	if (type == STATIC) body.type = b2_staticBody;
-	if (type == KINEMATIC) body.type = b2_kinematicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	// Add BODY to the world
-	b2Body* b = world->CreateBody(&body);
-
-	// Create SHAPE
-	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
-
-	// Create FIXTURE
-	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.density = 1.0f;
-	fixture.isSensor = true;
-
-	// Add fixture to the BODY
-	b->CreateFixture(&fixture);
-
-	// Create our custom PhysBody class
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->GetUserData().pointer = (uintptr_t)pbody;
-	pbody->width = width;
-	pbody->height = height;
-
-	// Return our PhysBody class
-	return pbody;
-}
 
 PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType type)
 {
