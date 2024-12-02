@@ -32,6 +32,10 @@ public:
 
 	void ResetPath();
 
+	void PropagatePath();
+
+	void FollowPath();
+
 public:
 
 private:
@@ -44,4 +48,6 @@ private:
 	Animation idle;
 	PhysBody* pbody;
 	Pathfinding* pathfinding;
+
+	bool propagatePath = false;
 };

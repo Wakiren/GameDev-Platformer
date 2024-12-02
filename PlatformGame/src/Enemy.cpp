@@ -53,6 +53,9 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
+
+	PropagatePath();
+
 	// Pathfinding testing inputs
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
 		Vector2D pos = GetPosition();
@@ -143,4 +146,37 @@ void Enemy::ResetPath() {
 	Vector2D pos = GetPosition();
 	Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
 	pathfinding->ResetPath(tilePos);
+}
+void Enemy::PropagatePath()
+{
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
+	{
+		propagatePath = true;
+	}
+
+	if (propagatePath)
+	{
+		ResetPath();
+		while (pathfinding->pathTiles.empty())
+		{
+			pathfinding->PropagateAStar(SQUARED);
+		}
+		//FollowPath();
+	}
+
+
+}
+void Enemy::FollowPath() 
+{
+	if (pathfinding->breadcrumbs.size() > 1) 
+	{
+		for (size_t i = 0; i < pathfinding->breadcrumbs.size(); i++)
+		{
+			float posx = pathfinding->breadcrumbs[i].getX();
+			float posy = pathfinding->breadcrumbs[i].getY();
+			Vector2D pos = Engine::GetInstance().map->MapToWorld(posx, posy);
+			SetPosition(pos);
+		}
+	}
+
 }

@@ -374,7 +374,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::ENEMY:
 		LOG("Collision ENEMY");
-		Engine::GetInstance().scene.get()->LoadState();
+		//Engine::GetInstance().scene.get()->LoadState();
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
