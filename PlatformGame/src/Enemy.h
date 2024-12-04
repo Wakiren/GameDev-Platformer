@@ -36,6 +36,12 @@ public:
 
 	void FollowPath();
 
+	void Patroll();
+
+	float Lerp(float a, float b, float t);
+
+	float fPathTimer = 0;
+
 public:
 
 private:

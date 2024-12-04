@@ -161,7 +161,16 @@ void Enemy::PropagatePath()
 		{
 			pathfinding->PropagateAStar(SQUARED);
 		}
-		//FollowPath();
+		if (fPathTimer <= 0) 
+		{
+			fPathTimer = 600;
+			FollowPath();
+		}
+		else 
+		{
+			fPathTimer -= Engine::GetInstance().GetDt();
+		}
+
 	}
 
 
@@ -179,4 +188,14 @@ void Enemy::FollowPath()
 		}
 	}
 
+}
+
+void Enemy::Patroll() 
+{
+	
+}
+
+float Enemy::Lerp(float a, float b, float t)
+{
+	return a + t * (b - a);
 }
