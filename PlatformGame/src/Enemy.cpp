@@ -161,16 +161,8 @@ void Enemy::PropagatePath()
 		{
 			pathfinding->PropagateAStar(SQUARED);
 		}
-		if (fPathTimer <= 0) 
-		{
-			fPathTimer = 600;
-			FollowPath();
-		}
-		else 
-		{
-			fPathTimer -= Engine::GetInstance().GetDt();
-		}
 
+		FollowPath();
 	}
 
 
@@ -184,7 +176,8 @@ void Enemy::FollowPath()
 			float posx = pathfinding->breadcrumbs[i].getX();
 			float posy = pathfinding->breadcrumbs[i].getY();
 			Vector2D pos = Engine::GetInstance().map->MapToWorld(posx, posy);
-			SetPosition(pos);
+			b2Vec2 vel = b2Vec2(-pos.getX()/100, pos.getY()/100);
+			pbody->body->SetLinearVelocity(vel);
 		}
 	}
 
