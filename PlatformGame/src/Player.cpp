@@ -81,6 +81,8 @@ bool Player::Update(float dt)
 	AnimationManager();
 	RayCast();
 	GodMode();
+
+
 	return true;
 
 }
@@ -373,8 +375,17 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision ITEM");
 		break;
 	case ColliderType::ENEMY:
-		LOG("Collision ENEMY");
-		//Engine::GetInstance().scene.get()->LoadState();
+		
+		if (pbody->body->GetLinearVelocity().y > 0.1) 
+		{
+			cout << "Enemy dead :D";
+		}
+		else 
+		{
+			cout << "Player dead :<";
+		}
+
+
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
@@ -400,3 +411,4 @@ Vector2D Player::GetPosition() {
 	Vector2D pos = Vector2D(METERS_TO_PIXELS(bodyPos.x), METERS_TO_PIXELS(bodyPos.y));
 	return pos;
 }
+

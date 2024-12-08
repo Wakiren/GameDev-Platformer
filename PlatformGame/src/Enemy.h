@@ -56,4 +56,6 @@ private:
 	Pathfinding* pathfinding;
 
 	bool propagatePath = false;
+
+	float vision, destiny;
 };

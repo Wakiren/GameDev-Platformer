@@ -218,6 +218,12 @@ bool Map::Load(std::string path, std::string fileName)
                                     c1->ctype = ColliderType::CHECKPOINT;
 
                                 }
+                                if (mapLayer->properties.GetProperty("gEnemy") != NULL && mapLayer->properties.GetProperty("gEnemy")->value == true)
+                                {
+                                    /*PhysBody* c1 = 
+                                    c1->ctype = ColliderType::ENEMY;*/
+
+                                }
 
                             }
                         }

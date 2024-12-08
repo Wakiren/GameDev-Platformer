@@ -46,6 +46,10 @@ bool Enemy::Start() {
 
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
+
+	vision = 0;
+	destiny = 10;
+
 	ResetPath();
 
 	return true;
@@ -54,76 +58,52 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 
-	PropagatePath();
+	//PropagatePath();
 
-	// Pathfinding testing inputs
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
-		Vector2D pos = GetPosition();
-		Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(),pos.getY());
-		pathfinding->ResetPath(tilePos);
+	while (vision <= destiny)
+	{
+		if (pathfinding->pathTiles.empty())
+		{
+			pathfinding->PropagateAStar(SQUARED);
+
+			vision++;
+
+			if (Engine::GetInstance().physics->debug == true)
+			{
+				pathfinding->DrawPath();
+			}
+		}
+		if (vision == destiny)
+		{
+			vision = 0;
+			ResetPath();
+		}
+		if (pathfinding->pathTiles.size() > 0) {
+
+
+			Vector2D Tile = Engine::GetInstance().map->MapToWorld(pathfinding->pathTiles.back().getX(), pathfinding->pathTiles.back().getY());
+			Vector2D pos = Tile - position;
+			pos = pos.normalized();
+			//The velocity is reduced to make the enemy move slower
+			b2Vec2 velocity = b2Vec2(pos.getX() * 2, 0);
+			pbody->body->SetLinearVelocity(velocity);
+		}
+
+
+		// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
+		b2Transform pbodyPos = pbody->body->GetTransform();
+		position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+		position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
+
+		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 2, &currentAnimation->GetCurrentFrame());
+		currentAnimation->Update();
+
+		// Draw pathfinding 
+		pathfinding->DrawPath();
+
+		return true;
 	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_DOWN) {
-		pathfinding->PropagateBFS();
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_J) == KEY_REPEAT &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-		pathfinding->PropagateBFS();
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_DOWN) {
-		pathfinding->PropagateDijkstra();
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_K) == KEY_REPEAT &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-		pathfinding->PropagateDijkstra();
-	}
-
-	// L13: TODO 3:	Add the key inputs to propagate the A* algorithm with different heuristics (Manhattan, Euclidean, Squared)
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_B) == KEY_DOWN) {
-		pathfinding->PropagateAStar(MANHATTAN);
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_B) == KEY_REPEAT &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-		pathfinding->PropagateAStar(MANHATTAN);
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_DOWN) {
-		pathfinding->PropagateAStar(EUCLIDEAN);
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_N) == KEY_REPEAT &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-		pathfinding->PropagateAStar(EUCLIDEAN);
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
-		pathfinding->PropagateAStar(SQUARED);
-	}
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_M) == KEY_REPEAT &&
-		Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) {
-		pathfinding->PropagateAStar(SQUARED);
-	}
-
-	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
-	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 2, &currentAnimation->GetCurrentFrame());
-	currentAnimation->Update();
-
-	// Draw pathfinding 
-	pathfinding->DrawPath();
-
-	return true;
 }
-
 bool Enemy::CleanUp()
 {
 	return true;
@@ -176,7 +156,7 @@ void Enemy::FollowPath()
 			float posx = pathfinding->breadcrumbs[i].getX();
 			float posy = pathfinding->breadcrumbs[i].getY();
 			Vector2D pos = Engine::GetInstance().map->MapToWorld(posx, posy);
-			b2Vec2 vel = b2Vec2(-pos.getX()/100, pos.getY()/100);
+			b2Vec2 vel = b2Vec2((pos.getX()/100) , pos.getY()/100);
 			pbody->body->SetLinearVelocity(vel);
 		}
 	}

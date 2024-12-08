@@ -80,10 +80,10 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	bool debug = false;
+
 private:
 
-	// Debug mode
-	bool debug = false;
 
 	// Box2D World
 	b2World* world;

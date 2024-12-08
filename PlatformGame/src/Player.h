@@ -105,4 +105,5 @@ public:
 	// L08 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 	PhysBody* pbodyFoot;
+
 };

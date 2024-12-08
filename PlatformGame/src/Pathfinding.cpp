@@ -128,7 +128,7 @@ void Pathfinding::DrawPath() {
     // Draw path
     for (const auto& pathTile : pathTiles) {
         Vector2D pathTileWorld = map->MapToWorld(pathTile.getX(), pathTile.getY());
-        Engine::GetInstance().render.get()->DrawTexture(tileX, pathTileWorld.getX(), pathTileWorld.getY());
+        //Engine::GetInstance().render.get()->DrawTexture(tileX, pathTileWorld.getX(), pathTileWorld.getY());
     }
 
 }
