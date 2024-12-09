@@ -43,6 +43,7 @@ public:
 
 	float fPathTimer = 0;
 
+	bool IsInVision();
 public:
 
 private:
@@ -58,6 +59,10 @@ private:
 
 	bool propagatePath = false;
 
-	float vision, destiny;
 	b2Vec2 eVelocity;
+
+	Vector2D distance;
+	Vector2D visionLimit;
+
+	int check = 0;
 };

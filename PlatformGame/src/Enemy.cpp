@@ -48,8 +48,6 @@ bool Enemy::Start() {
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
 
-	vision = 0;
-	destiny = 10;
 
 	ResetPath();
 
@@ -59,35 +57,44 @@ bool Enemy::Start() {
 bool Enemy::Update(float dt)
 {
 
-	//PropagatePath();
+		Vector2D target = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
-	//std::cout << pbody->body->GetPosition().x << std::endl;
+		distance.setX(abs(target.getX() - GetPosition().getX()));
+		distance.setY(abs(target.getY() - GetPosition().getY()));
 
-	//while (vision <= destiny)
-	//{
-	//	if (pathfinding->pathTiles.empty())
-	//	{
-	//		pathfinding->PropagateAStar(SQUARED);
+		visionLimit = Engine::GetInstance().map.get()->MapToWorld(16, 16);
 
-	//		vision++;
-	//	}
-	//	if (pathfinding->pathTiles.size() > 0) {
+		if (IsInVision())
+		{
+			if (check < 20)
+			{
+				pathfinding->PropagateAStar(SQUARED);
+				check += 1;
+			}
+			else {
+				Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(GetPosition().getX(), GetPosition().getY());
+				pathfinding->ResetPath(tilePos);
+				std::cout << tilePos << std::endl;
+				check = 0;
+			}
+			if (pathfinding->pathTiles.size() > 0) {
+				Vector2D nextTile = pathfinding->pathTiles.front();
+				Vector2D nextPos = Engine::GetInstance().map->MapToWorld(nextTile.getX(), nextTile.getY());
+				Vector2D direction = nextPos - GetPosition();
+				direction.normalized();
+				eVelocity = b2Vec2(direction.getX() * 0.02f, direction.getY() * 0.02f);
 
+				pbody->body->SetLinearVelocity(eVelocity);
+			}
+			else {
+				pbody->body->SetLinearVelocity(b2Vec2_zero);
+			}
+		}
+		else
+		{
+			pbody->body->SetLinearVelocity(b2Vec2_zero);
+		}
 
-	//		Vector2D Tile = Engine::GetInstance().map->MapToWorld(pathfinding->pathTiles.back().getX(), pathfinding->pathTiles.back().getY());
-	//		Vector2D pos = Tile - position;
-	//		pos = pos.normalized();
-	//		eVelocity = b2Vec2(pos.getX() * 0.1f, 0);
-
-	//	}
-
-	//	if (vision == destiny)
-	//	{
-	//		vision = 0;
-	//		ResetPath();
-	//	}
-
-	//	pbody->body->SetLinearVelocity(eVelocity);
 		// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 		b2Transform pbodyPos = pbody->body->GetTransform();
 		position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
@@ -170,3 +177,10 @@ float Enemy::Lerp(float a, float b, float t)
 {
 	return a + t * (b - a);
 }
+
+bool Enemy::IsInVision()
+{
+	return distance.getX() <= visionLimit.getX() && distance.getY() <= visionLimit.getY();
+}
+
+

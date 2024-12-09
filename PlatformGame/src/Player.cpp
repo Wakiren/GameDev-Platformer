@@ -392,7 +392,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::ENEMY:
 		
-		if (pbody->body->GetLinearVelocity().y > 0.1) 
+		if (pbody->body->GetLinearVelocity().y > 0.4) 
 		{
 			cout << "Enemy dead :D";
 			if (canCollide) 
@@ -400,7 +400,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				canCollide = false;
 				Engine::GetInstance().physics.get()->DeletePhysBody(physB);
 				collidetimer = 10;
-				dead = true;
+
 			}
 
 
@@ -408,6 +408,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		else 
 		{
 			cout << "Player dead :<";
+			dead = true;
 		}
 
 
