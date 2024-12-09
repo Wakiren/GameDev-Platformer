@@ -61,70 +61,77 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
-		
 
-		Vector2D target = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
-		distance.setX(abs(target.getX() - GetPosition().getX()));
-		distance.setY(abs(target.getY() - GetPosition().getY()));
+	if (pbody->body == nullptr)
+	{
+		return true;
+	}
+	Vector2D target = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
-		visionLimit = Engine::GetInstance().map.get()->MapToWorld(16, 16);
+	distance.setX(abs(target.getX() - GetPosition().getX()));
+	distance.setY(abs(target.getY() - GetPosition().getY()));
 
-		if (IsInVision())
+	visionLimit = Engine::GetInstance().map.get()->MapToWorld(16, 16);
+
+	if (IsInVision())
+	{
+		if (check < 20)
 		{
-			if (check < 20)
-			{
-				pathfinding->PropagateAStar(SQUARED);
-				check += 1;
-			}
-			else {
-				Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(GetPosition().getX(), GetPosition().getY());
-				pathfinding->ResetPath(tilePos);
-				check = 0;
-			}
-			if (pathfinding->pathTiles.size() > 0) {
-				Vector2D nextTile = pathfinding->pathTiles.front();
-				Vector2D nextPos = Engine::GetInstance().map->MapToWorld(nextTile.getX(), nextTile.getY());
-				Vector2D direction = nextPos - GetPosition();
-				direction.normalized();
-				if (parameters.attribute("gravity").as_bool() == false)
-				{
-					eVelocity = b2Vec2(direction.getX() * 0.02f, direction.getY() * 0.02f);
-				}
-				else 
-				{
-					eVelocity = b2Vec2(direction.getX() * 0.02f, 0);
-				}
-
-
-				pbody->body->SetLinearVelocity(eVelocity);
-			}
-			else {
-				pbody->body->SetLinearVelocity(b2Vec2_zero);
-			}
+			pathfinding->PropagateAStar(SQUARED);
+			check += 1;
 		}
-		else
-		{
+		else {
+			Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(GetPosition().getX(), GetPosition().getY());
+			pathfinding->ResetPath(tilePos);
+			check = 0;
+		}
+		if (pathfinding->pathTiles.size() > 0) {
+			Vector2D nextTile = pathfinding->pathTiles.front();
+			Vector2D nextPos = Engine::GetInstance().map->MapToWorld(nextTile.getX(), nextTile.getY());
+			Vector2D direction = nextPos - GetPosition();
+			direction.normalized();
+			if (parameters.attribute("gravity").as_bool() == false)
+			{
+				eVelocity = b2Vec2(direction.getX() * 0.02f, direction.getY() * 0.02f);
+			}
+			else
+			{
+				eVelocity = b2Vec2(direction.getX() * 0.02f, 0);
+			}
+
+
+			pbody->body->SetLinearVelocity(eVelocity);
+		}
+		else {
 			pbody->body->SetLinearVelocity(b2Vec2_zero);
 		}
+	}
+	else
+	{
+		pbody->body->SetLinearVelocity(b2Vec2_zero);
+	}
 
-		// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
-		b2Transform pbodyPos = pbody->body->GetTransform();
-		position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
-		position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
-
-		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 2, &currentAnimation->GetCurrentFrame());
-		currentAnimation->Update();
-
-		if (Engine::GetInstance().physics.get()->debug)
-		{
-			// Draw pathfinding 
-			pathfinding->DrawPath();
-		}
+	// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
+	b2Transform pbodyPos = pbody->body->GetTransform();
+	position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
+	position.setY(METERS_TO_PIXELS(pbodyPos.p.y) - texH / 2);
 
 
-		return true;
-	
+	Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 2, &currentAnimation->GetCurrentFrame());
+	currentAnimation->Update();
+
+
+
+
+
+	if (Engine::GetInstance().physics.get()->debug)
+	{
+		// Draw pathfinding 
+		pathfinding->DrawPath();
+	}
+	return true;
+
 }
 bool Enemy::CleanUp()
 {
@@ -149,26 +156,8 @@ void Enemy::ResetPath() {
 	Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(pos.getX(), pos.getY());
 	pathfinding->ResetPath(tilePos);
 }
-void Enemy::PropagatePath()
-{
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
-	{
-		propagatePath = true;
-	}
-
-	if (propagatePath)
-	{
-		ResetPath();
-		while (pathfinding->pathTiles.empty())
-		{
-			pathfinding->PropagateAStar(SQUARED);
-		}
-
-		FollowPath();
-	}
 
 
-}
 void Enemy::FollowPath() 
 {
 	if (pathfinding->breadcrumbs.size() > 1) 

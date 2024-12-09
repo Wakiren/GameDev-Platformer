@@ -31,6 +31,7 @@ enum class ColliderType {
 	CHECKPOINT,
 	FOOT_SENSOR,
 	UNKNOWN,
+	END
 	// ..
 };
 

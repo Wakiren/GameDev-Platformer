@@ -33,8 +33,6 @@ public:
 
 	void ResetPath();
 
-	void PropagatePath();
-
 	void FollowPath();
 
 	void Patroll();
@@ -44,7 +42,6 @@ public:
 	float fPathTimer = 0;
 
 	bool IsInVision();
-public:
 
 private:
 
@@ -65,4 +62,6 @@ private:
 	Vector2D visionLimit;
 
 	int check = 0;
+
+
 };

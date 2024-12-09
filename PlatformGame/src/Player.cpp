@@ -68,6 +68,8 @@ bool Player::Start() {
 	jump = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.wav");
 	gameSaved = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/confirmation_001.ogg");
 	enemydead = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/enemydead.wav");
+	death = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/death.wav");
+	lComplete = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/win.mp3");
 
 	return true;
 }
@@ -360,6 +362,11 @@ void Player::GodMode()
 
 }
 
+void Player::EndLevel()
+{
+
+}
+
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
@@ -402,8 +409,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
+	case ColliderType::END:
+		cout << "AAA";
+		Engine::GetInstance().audio.get()->PlayFx(lComplete);
+		break;
 	case ColliderType::CHECKPOINT:
-		cout << "AAAA";
 		Engine::GetInstance().audio.get()->PlayFx(gameSaved);
 		Engine::GetInstance().scene.get()->SaveState();
 		break;
@@ -439,6 +449,7 @@ void Player::Death()
 
 	if (dead)
 	{
+		Engine::GetInstance().audio.get()->PlayFx(death);
 		dead = false;
 		Engine::GetInstance().scene.get()->LoadState();
 	}

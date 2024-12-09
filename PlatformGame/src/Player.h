@@ -49,6 +49,8 @@ public:
 	void RayCast();
 
 	void GodMode();
+
+	void EndLevel();
 	bool godMode;
 
 	enum class State
@@ -98,7 +100,7 @@ public:
 
 	//Audio fx
 	int pickCoinFxId;
-	int jump, gameSaved, enemydead;
+	int jump, gameSaved, enemydead, death, lComplete;
 
 	pugi::xml_node parameters;
 
