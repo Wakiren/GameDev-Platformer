@@ -41,14 +41,54 @@
 				</animations>
 			</player>
 			<enemies>
-				<enemy name="badguy" x="120" y="80" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="true">
+				<enemy name="badguy" x="800" y="80" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="false">
 					<animations>
-						<idle loop="true" speed="0.05">
-							<frame x="16" y="288" w="16" h="16" />
-							<frame x="32" y="288" w="16" h="16" />
+						<idle loop="true" speed="0.1">
+							<frame x="0" y="324" w="16" h="16" />
+							<frame x="16" y="324" w="16" h="16" />
 						</idle>
 					</animations>
 				</enemy>
+        <enemy name="badguy2" x="400" y="80" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="false">
+          <animations>
+            <idle loop="true" speed="0.1">
+              <frame x="0" y="324" w="16" h="16" />
+              <frame x="16" y="324" w="16" h="16" />
+            </idle>
+          </animations>
+        </enemy>
+        <enemy name="badguy3" x="1924" y="120" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="false">
+          <animations>
+            <idle loop="true" speed="0.1">
+              <frame x="0" y="324" w="16" h="16" />
+              <frame x="16" y="324" w="16" h="16" />
+            </idle>
+          </animations>
+        </enemy>
+        <enemy name="badguy4" x="2262" y="120" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="false">
+          <animations>
+            <idle loop="true" speed="0.1">
+              <frame x="0" y="324" w="16" h="16" />
+              <frame x="16" y="324" w="16" h="16" />
+            </idle>
+          </animations>
+        </enemy>
+        <enemy name="groundbadguy" x="100" y="80" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="true">
+          <animations>
+            <idle loop="true" speed="0.05">
+              <frame x="16" y="288" w="16" h="16" />
+              <frame x="32" y="288" w="16" h="16" />
+            </idle>
+          </animations>
+        </enemy>
+        <enemy name="groundbadguy2" x="2708" y="80" w="16" h="16" texture="Assets/Maps/1-bitPack/Tilemap/monochrome_tilemap_transparent_torch_modified.png" gravity="true">
+          <animations>
+            <idle loop="true" speed="0.05">
+              <frame x="16" y="288" w="16" h="16" />
+              <frame x="32" y="288" w="16" h="16" />
+            </idle>
+          </animations>
+        </enemy>
 			</enemies>
 		</entities>
 	</scene>

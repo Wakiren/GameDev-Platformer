@@ -79,6 +79,8 @@ public:
 	float x, y;
 	void SetPosition(Vector2D pos);
 
+	void Death();
+
 	Vector2D GetPosition();
 public:
 
@@ -96,7 +98,7 @@ public:
 
 	//Audio fx
 	int pickCoinFxId;
-	int jump;
+	int jump, gameSaved, enemydead;
 
 	pugi::xml_node parameters;
 

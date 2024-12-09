@@ -45,6 +45,11 @@ bool Enemy::Start() {
 	// Set the gravity of the body
 	if (!parameters.attribute("gravity").as_bool()) pbody->body->SetGravityScale(0);
 
+	if (parameters.attribute("gravity").as_bool() == true) 
+	{
+		pbody->body->SetGravityScale(8);
+	}
+
 	// Initialize pathfinding
 	pathfinding = new Pathfinding();
 
@@ -56,6 +61,7 @@ bool Enemy::Start() {
 
 bool Enemy::Update(float dt)
 {
+		
 
 		Vector2D target = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
@@ -74,7 +80,6 @@ bool Enemy::Update(float dt)
 			else {
 				Vector2D tilePos = Engine::GetInstance().map.get()->WorldToMap(GetPosition().getX(), GetPosition().getY());
 				pathfinding->ResetPath(tilePos);
-				std::cout << tilePos << std::endl;
 				check = 0;
 			}
 			if (pathfinding->pathTiles.size() > 0) {
@@ -82,7 +87,15 @@ bool Enemy::Update(float dt)
 				Vector2D nextPos = Engine::GetInstance().map->MapToWorld(nextTile.getX(), nextTile.getY());
 				Vector2D direction = nextPos - GetPosition();
 				direction.normalized();
-				eVelocity = b2Vec2(direction.getX() * 0.02f, direction.getY() * 0.02f);
+				if (parameters.attribute("gravity").as_bool() == false)
+				{
+					eVelocity = b2Vec2(direction.getX() * 0.02f, direction.getY() * 0.02f);
+				}
+				else 
+				{
+					eVelocity = b2Vec2(direction.getX() * 0.02f, 0);
+				}
+
 
 				pbody->body->SetLinearVelocity(eVelocity);
 			}
@@ -103,8 +116,12 @@ bool Enemy::Update(float dt)
 		Engine::GetInstance().render.get()->DrawTexture(texture, (int)position.getX(), (int)position.getY() - 2, &currentAnimation->GetCurrentFrame());
 		currentAnimation->Update();
 
-		// Draw pathfinding 
-		pathfinding->DrawPath();
+		if (Engine::GetInstance().physics.get()->debug)
+		{
+			// Draw pathfinding 
+			pathfinding->DrawPath();
+		}
+
 
 		return true;
 	

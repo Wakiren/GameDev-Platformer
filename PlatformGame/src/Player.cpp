@@ -66,6 +66,8 @@ bool Player::Start() {
 
 	//Sounds
 	jump = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.wav");
+	gameSaved = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/confirmation_001.ogg");
+	enemydead = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/enemydead.wav");
 
 	return true;
 }
@@ -81,25 +83,10 @@ bool Player::Update(float dt)
 	AnimationManager();
 	RayCast();
 	GodMode();
+	Death();
 
-	if (collidetimer <= 0) 
-	{
-		canCollide = true;
-	}
-	else 
-	{
-		collidetimer--;
-
-	}
-
-	if (dead) 
-	{
-		dead = false;
-		Engine::GetInstance().scene.get()->LoadState();
-	}
 	return true;
 
-	cout << collidetimer << endl;
 }
 
 bool Player::CleanUp()
@@ -398,12 +385,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			if (canCollide) 
 			{
 				canCollide = false;
+				Engine::GetInstance().audio.get()->PlayFx(enemydead);
 				Engine::GetInstance().physics.get()->DeletePhysBody(physB);
 				collidetimer = 10;
 
 			}
-
-
 		}
 		else 
 		{
@@ -417,6 +403,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision UNKNOWN");
 		break;
 	case ColliderType::CHECKPOINT:
+		cout << "AAAA";
+		Engine::GetInstance().audio.get()->PlayFx(gameSaved);
 		Engine::GetInstance().scene.get()->SaveState();
 		break;
 	default:
@@ -430,6 +418,30 @@ void Player::SetPosition(Vector2D pos) {
 	pos.setY(pos.getY() + texH / 2);
 	b2Vec2 bodyPos = b2Vec2(PIXEL_TO_METERS(pos.getX()), PIXEL_TO_METERS(pos.getY()));
 	pbody->body->SetTransform(bodyPos, 0);
+}
+
+void Player::Death()
+{
+	if (collidetimer <= 0)
+	{
+		canCollide = true;
+	}
+	else
+	{
+		collidetimer--;
+
+	}
+
+	if (GetPosition().getY() > 16 * 12) 
+	{
+		dead = true;
+	}
+
+	if (dead)
+	{
+		dead = false;
+		Engine::GetInstance().scene.get()->LoadState();
+	}
 }
 
 Vector2D Player::GetPosition() {
