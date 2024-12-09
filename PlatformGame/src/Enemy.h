@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "Animation.h"
 #include "Pathfinding.h"
+#include "box2D/box2d.h"
 
 struct SDL_Texture;
 
@@ -58,4 +59,5 @@ private:
 	bool propagatePath = false;
 
 	float vision, destiny;
+	b2Vec2 eVelocity;
 };

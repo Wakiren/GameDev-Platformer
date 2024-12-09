@@ -16,7 +16,7 @@ Player::Player() : Entity(EntityType::PLAYER)
 }
 
 Player::~Player() {
-
+	pbody->body->GetWorld()->DestroyBody(pbody->body);
 }
 
 bool Player::Awake() {
@@ -82,9 +82,24 @@ bool Player::Update(float dt)
 	RayCast();
 	GodMode();
 
+	if (collidetimer <= 0) 
+	{
+		canCollide = true;
+	}
+	else 
+	{
+		collidetimer--;
 
+	}
+
+	if (dead) 
+	{
+		dead = false;
+		Engine::GetInstance().scene.get()->LoadState();
+	}
 	return true;
 
+	cout << collidetimer << endl;
 }
 
 bool Player::CleanUp()
@@ -355,6 +370,7 @@ void Player::GodMode()
 	}
 
 
+
 }
 
 
@@ -379,6 +395,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (pbody->body->GetLinearVelocity().y > 0.1) 
 		{
 			cout << "Enemy dead :D";
+			if (canCollide) 
+			{
+				canCollide = false;
+				Engine::GetInstance().physics.get()->DeletePhysBody(physB);
+				collidetimer = 10;
+				dead = true;
+			}
+
+
 		}
 		else 
 		{

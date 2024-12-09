@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Entity.h"
 #include "box2d/box2d.h"
+#include <list>
 
 #define GRAVITY_X 0.0f
 #define GRAVITY_Y -10.0f
@@ -23,13 +24,13 @@ enum bodyType {
 };
 
 enum class ColliderType {
-	PLAYER, 
+	PLAYER,
 	ITEM,
-	PLATFORM, 
+	PLATFORM,
+	ENEMY,
+	CHECKPOINT,
 	FOOT_SENSOR,
 	UNKNOWN,
-	ENEMY,
-	CHECKPOINT
 	// ..
 };
 
@@ -46,7 +47,6 @@ public:
 	float GetRotation() const;
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
-	
 
 public:
 	int width = 0;
@@ -76,15 +76,22 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
-	
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+	void EndContact(b2Contact* contact);
 
-	bool debug = false;
+	void DeletePhysBody(PhysBody* physBody);
+	bool IsPendingToDelete(PhysBody* physBody);
 
 private:
 
+	// Debug mode
+	bool debug;
 
 	// Box2D World
 	b2World* world;
+
+	// List of physics bodies
+	std::list<PhysBody*> bodiesToDelete;
 };

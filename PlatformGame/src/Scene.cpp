@@ -163,7 +163,7 @@ Vector2D Scene::GetPlayerPosition()
 void Scene::LoadState() {
 
 	pugi::xml_document loadFile;
-	pugi::xml_parse_result result = loadFile.load_file("config.xml");
+	pugi::xml_parse_result result = loadFile.load_file("save.xml");
 
 	if (result == NULL)
 	{
@@ -208,5 +208,5 @@ void Scene::SaveState() {
 	// ...
 
 	//Saves the modifications to the XML 
-	loadFile.save_file("config.xml");
+	loadFile.save_file("save.xml");
 }

@@ -106,4 +106,9 @@ public:
 	PhysBody* pbody;
 	PhysBody* pbodyFoot;
 
+	bool canCollide;
+	float collidetimer;
+
+	bool dead;
+
 };

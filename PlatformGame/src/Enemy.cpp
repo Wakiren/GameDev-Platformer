@@ -15,6 +15,7 @@ Enemy::Enemy() : Entity(EntityType::ENEMY)
 }
 
 Enemy::~Enemy() {
+	pbody->body->GetWorld()->DestroyBody(pbody->body);
 	delete pathfinding;
 }
 
@@ -60,36 +61,33 @@ bool Enemy::Update(float dt)
 
 	//PropagatePath();
 
-	while (vision <= destiny)
-	{
-		if (pathfinding->pathTiles.empty())
-		{
-			pathfinding->PropagateAStar(SQUARED);
+	//std::cout << pbody->body->GetPosition().x << std::endl;
 
-			vision++;
+	//while (vision <= destiny)
+	//{
+	//	if (pathfinding->pathTiles.empty())
+	//	{
+	//		pathfinding->PropagateAStar(SQUARED);
 
-			if (Engine::GetInstance().physics->debug == true)
-			{
-				pathfinding->DrawPath();
-			}
-		}
-		if (vision == destiny)
-		{
-			vision = 0;
-			ResetPath();
-		}
-		if (pathfinding->pathTiles.size() > 0) {
+	//		vision++;
+	//	}
+	//	if (pathfinding->pathTiles.size() > 0) {
 
 
-			Vector2D Tile = Engine::GetInstance().map->MapToWorld(pathfinding->pathTiles.back().getX(), pathfinding->pathTiles.back().getY());
-			Vector2D pos = Tile - position;
-			pos = pos.normalized();
-			//The velocity is reduced to make the enemy move slower
-			b2Vec2 velocity = b2Vec2(pos.getX() * 2, 0);
-			pbody->body->SetLinearVelocity(velocity);
-		}
+	//		Vector2D Tile = Engine::GetInstance().map->MapToWorld(pathfinding->pathTiles.back().getX(), pathfinding->pathTiles.back().getY());
+	//		Vector2D pos = Tile - position;
+	//		pos = pos.normalized();
+	//		eVelocity = b2Vec2(pos.getX() * 0.1f, 0);
 
+	//	}
 
+	//	if (vision == destiny)
+	//	{
+	//		vision = 0;
+	//		ResetPath();
+	//	}
+
+	//	pbody->body->SetLinearVelocity(eVelocity);
 		// L08 TODO 4: Add a physics to an item - update the position of the object from the physics.  
 		b2Transform pbodyPos = pbody->body->GetTransform();
 		position.setX(METERS_TO_PIXELS(pbodyPos.p.x) - texH / 2);
@@ -102,7 +100,7 @@ bool Enemy::Update(float dt)
 		pathfinding->DrawPath();
 
 		return true;
-	}
+	
 }
 bool Enemy::CleanUp()
 {
