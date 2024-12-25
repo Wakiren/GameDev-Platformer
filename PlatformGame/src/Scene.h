@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Vector2D.h"
+#include "GuiControlButton.h"
 
 struct SDL_Texture;
 
@@ -45,6 +46,11 @@ public:
 	void LoadState();
 	//L15 TODO 2: Implement the Save function
 	void SaveState();
+
+	// Handles multiple Gui Event methods
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
+
 private:
 	SDL_Texture* img;
 	SDL_Texture* mouseTileTex = nullptr;
@@ -54,4 +60,6 @@ private:
 	//L03: TODO 3b: Declare a Player attribute
 	Player* player;
 	std::vector<Enemy*> enemyList;
+
+	GuiControlButton* guiBt;
 };
