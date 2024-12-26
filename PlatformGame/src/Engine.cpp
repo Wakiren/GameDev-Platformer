@@ -15,6 +15,8 @@
 #include "Physics.h"
 #include "GuiManager.h"
 
+#include "tracy/Tracy.hpp"
+
 // Constructor
 Engine::Engine() {
 
@@ -128,6 +130,9 @@ bool Engine::Start() {
 // Called each loop iteration
 bool Engine::Update() {
 
+    ZoneScoped;
+    // Code you want to profile
+
     bool ret = true;
     PrepareUpdate();
 
@@ -189,12 +194,14 @@ void Engine::ChangeFrameRate()
 // ---------------------------------------------
 void Engine::PrepareUpdate()
 {
+    ZoneScoped;
     frameTime.Start();
 }
 
 // ---------------------------------------------
 void Engine::FinishUpdate()
 {
+    ZoneScoped;
     // L03: TODO 1: Cap the framerate of the gameloop
     double currentDt = frameTime.ReadMs();
     if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
