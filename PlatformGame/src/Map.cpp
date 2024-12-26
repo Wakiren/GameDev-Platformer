@@ -41,8 +41,15 @@ bool Map::Update(float dt)
 
     bool ret = true;
 
-    if (mapLoaded) {
+    float cameraX = Engine::GetInstance().render.get()->camera.x;
+    float cameraY = Engine::GetInstance().render.get()->camera.y;
+    float cameraW = Engine::GetInstance().render.get()->camera.w * 3.5f;
+    float cameraH = Engine::GetInstance().render.get()->camera.h;
+    const float margin = 64;
 
+    if (mapLoaded) {
+        std::cout << cameraX << std::endl;
+        
         // L07 TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
         // iterate all tiles in a layer
         for (const auto& mapLayer : mapData.layers) {
@@ -64,8 +71,14 @@ bool Map::Update(float dt)
                                 SDL_Rect tileRect = tileSet->GetRect(gid);
                                 //Get the screen coordinates from the tile coordinates
                                 Vector2D mapCoord = MapToWorld(i, j);
-                                //Draw the texture
-                                Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
+
+                                //ADD HERE FRUSTUM CULLING
+                                if (mapCoord.getX() > cameraX - margin && mapCoord.getX() < (cameraX + cameraW + margin))
+                                {
+                                    //Draw the texture
+                                    Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
+                                }
+
                             }
                         }
                     }
