@@ -6,6 +6,8 @@
 #include "Scene.h"
 #include "Log.h"
 
+#include "tracy/Tracy.hpp"
+
 Pathfinding::Pathfinding() {
     
      //Loads texture to draw the path
@@ -262,6 +264,9 @@ void Pathfinding::PropagateDijkstra() {
 }
 
 void Pathfinding::PropagateAStar(ASTAR_HEURISTICS heuristic) {
+
+    ZoneScoped;
+    // Code you want to profile
 
     // L13: TODO 2: Adapt Dijkstra algorithm for AStar. Consider the different heuristics
 

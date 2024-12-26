@@ -7,6 +7,9 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+
+#include "tracy/Tracy.hpp"
+
 #include <iostream>
 
 using namespace std;
@@ -76,6 +79,7 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
+	ZoneScoped;
 	Walking(dt);
 	Jumping(dt);
 	Dashing(dt);

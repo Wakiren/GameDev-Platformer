@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+#include "tracy/Tracy.hpp"
+
 Map::Map() : Module(), mapLoaded(false)
 {
     name = "map";
@@ -33,6 +35,10 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+
+    ZoneScoped;
+    // Code you want to profile
+
     bool ret = true;
 
     if (mapLoaded) {
