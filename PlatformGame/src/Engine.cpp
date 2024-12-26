@@ -251,6 +251,7 @@ void Engine::FinishUpdate()
 // Call modules before each loop iteration
 bool Engine::PreUpdate()
 {
+    ZoneScoped;
     //Iterates the module list and calls PreUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {
@@ -266,6 +267,7 @@ bool Engine::PreUpdate()
 // Call modules on each loop iteration
 bool Engine::DoUpdate()
 {
+    ZoneScoped;
     //Iterates the module list and calls Update on each module
     bool result = true;
     for (const auto& module : moduleList) {
