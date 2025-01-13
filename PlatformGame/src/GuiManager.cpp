@@ -14,6 +14,7 @@ GuiManager::~GuiManager() {}
 
 bool GuiManager::Start()
 {
+	IntroScreen  = Engine::GetInstance().textures.get()->Load("Assets/Textures/IntroScreen");
 	return true;
 }
 
@@ -44,6 +45,27 @@ bool GuiManager::Update(float dt)
 	for (const auto& control : guiControlsList)
 	{
 		control->Update(dt);
+	}
+
+	switch (state)
+	{
+		case GuiManager::INTRO:
+			Engine::GetInstance().render.get()->DrawTexture(IntroScreen, 0, 0);
+			break;
+		case GuiManager::TITLE:
+			break;
+		case GuiManager::PAUSE:
+			break;
+		case GuiManager::CREDIT:
+			break;
+		case GuiManager::ENDLEVEL:
+			break;
+		case GuiManager::END:
+			break;
+		case GuiManager::GAMEOVER:
+			break;
+		default:
+			break;
 	}
 
 	return true;

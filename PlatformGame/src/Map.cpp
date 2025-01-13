@@ -35,28 +35,34 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
-
     ZoneScoped;
     // Code you want to profile
 
     bool ret = true;
 
-    float cameraX = Engine::GetInstance().render.get()->camera.x;
-    float cameraY = Engine::GetInstance().render.get()->camera.y;
-    float cameraW = Engine::GetInstance().render.get()->camera.w * 3.5f;
-    float cameraH = Engine::GetInstance().render.get()->camera.h;
-    const float margin = 64;
-
     if (mapLoaded) {
-        std::cout << cameraX << std::endl;
-        
-        // L07 TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
-        // iterate all tiles in a layer
+
+        int scale = 3;
+
+        // FRUSTUM CULLING
         for (const auto& mapLayer : mapData.layers) {
             //Check if the property Draw exist get the value, if it's true draw the lawyer
             if (mapLayer->properties.GetProperty("Draw") != NULL && mapLayer->properties.GetProperty("Draw")->value == true) {
-                for (int i = 0; i < mapData.width; i++) {
-                    for (int j = 0; j < mapData.height; j++) {
+
+                Vector2D camPos = Vector2D(Engine::GetInstance().render->camera.x * -1, Engine::GetInstance().render->camera.y * -1);
+                if (camPos.getX() < 0) camPos.setX(0);
+                if (camPos.getY() < 0) camPos.setY(0);
+                Vector2D camPosTile = WorldToMap(camPos.getX() / scale, camPos.getY() / scale);
+
+                Vector2D camSize = Vector2D(Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h);
+                Vector2D camSizeTile = WorldToMap(camSize.getX(), camSize.getY());
+
+                Vector2D limits = Vector2D(camPosTile.getX() + camSizeTile.getX(), camPosTile.getY() + camSizeTile.getY());
+                if (limits.getX() > mapData.width) limits.setX(mapData.width);
+                if (limits.getY() > mapData.height) limits.setY(mapData.height);
+
+                for (int i = camPosTile.getX(); i < limits.getX(); i++) {
+                    for (int j = camPosTile.getY(); j < limits.getY(); j++) {
 
                         // L07 TODO 9: Complete the draw function
 
@@ -71,14 +77,8 @@ bool Map::Update(float dt)
                                 SDL_Rect tileRect = tileSet->GetRect(gid);
                                 //Get the screen coordinates from the tile coordinates
                                 Vector2D mapCoord = MapToWorld(i, j);
-
-                                //ADD HERE FRUSTUM CULLING
-                                if (mapCoord.getX() > cameraX - margin && mapCoord.getX() < (cameraX + cameraW + margin))
-                                {
-                                    //Draw the texture
-                                    Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
-                                }
-
+                                //Draw the texture
+                                Engine::GetInstance().render->DrawTexture(tileSet->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
                             }
                         }
                     }

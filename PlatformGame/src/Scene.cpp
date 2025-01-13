@@ -50,8 +50,8 @@ bool Scene::Awake()
 		enemyList.push_back(enemy);
 	}
 
-	SDL_Rect btPos = { 520, 350, 120,120 };
-	guiBt = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
+	//SDL_Rect btPos = { 520, 350, 120,120 };
+	//guiBt = (GuiControlButton*)Engine::GetInstance().guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
 
 	return ret;
 }

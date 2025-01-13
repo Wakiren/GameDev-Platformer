@@ -32,5 +32,24 @@ public:
 	std::list<GuiControl*> guiControlsList;
 	SDL_Texture* texture;
 
+	enum UIState 
+	{
+		INTRO,
+		TITLE,
+		PAUSE,
+		CREDIT,
+		ENDLEVEL,
+		END,
+		GAMEOVER
+	};
+
+	UIState state;
+
+	SDL_Texture* IntroScreen;
+	SDL_Texture* TitleScreen;
+	SDL_Texture* GameOverScreen;
+	SDL_Texture* NextLevelScreen;
+	SDL_Texture* CreditScreen;
+
 };
 
