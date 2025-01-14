@@ -55,6 +55,7 @@ private:
 	void FadeToBlack(float fadeSpeed);
 	bool inTransition;
 	float introTimer = 0;
+	float introTimerTime = 600;
 	bool startIntroTimer;
 
 };

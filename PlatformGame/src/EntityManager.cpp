@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Item.h"
+#include "GuiManager.h"
 #include "tracy/Tracy.hpp"
 
 EntityManager::EntityManager() : Module()

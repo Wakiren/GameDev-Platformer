@@ -35,5 +35,8 @@ public:
 public:
 
 	std::list<Entity*> entities;
+	
+	void UpdateEntities();
+	bool updateEntities;
 
 };

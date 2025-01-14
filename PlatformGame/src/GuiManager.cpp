@@ -21,6 +21,7 @@ GuiManager::~GuiManager() {}
 bool GuiManager::Start()
 {
 	IntroScreen  = Engine::GetInstance().textures.get()->Load("Assets/Textures/UI/IntroScreen.png");
+	TitleScreen = Engine::GetInstance().textures.get()->Load("Assets/Textures/UI/TitleScreen.png");
 	return true;
 }
 
@@ -77,6 +78,8 @@ bool GuiManager::Update(float dt)
 	{
 		case GuiManager::INTRO:
 
+
+
 			Engine::GetInstance().render.get()->DrawTexture(IntroScreen, -15 , 0, &rect,1, 0, 0, 0, 0.18 );
 			//if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN && !inTransition)
 			//{
@@ -90,7 +93,7 @@ bool GuiManager::Update(float dt)
 				startIntroTimer = false;
 				introTimer += dt;
 			}
-			if (introTimer >= 600) 
+			if (introTimer >= introTimerTime) 
 			{
 				state = TITLE;
 				introTimer = 0;
@@ -99,6 +102,9 @@ bool GuiManager::Update(float dt)
 
 			break;
 		case GuiManager::TITLE:
+
+			Engine::GetInstance().render.get()->DrawTexture(TitleScreen, -15, 0, &rect, 1, 0, 0, 0, 0.18);
+
 			break;
 		case GuiManager::PAUSE:
 			break;
