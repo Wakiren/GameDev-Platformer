@@ -42,7 +42,7 @@ bool Map::Update(float dt)
 
     if (mapLoaded) {
 
-        int scale = 3;
+        float scale = 3;
 
         // FRUSTUM CULLING
         for (const auto& mapLayer : mapData.layers) {

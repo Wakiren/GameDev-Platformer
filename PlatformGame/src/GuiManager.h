@@ -43,13 +43,19 @@ public:
 		GAMEOVER
 	};
 
-	UIState state;
+	UIState state = INTRO;
 
+private:
 	SDL_Texture* IntroScreen;
 	SDL_Texture* TitleScreen;
 	SDL_Texture* GameOverScreen;
 	SDL_Texture* NextLevelScreen;
 	SDL_Texture* CreditScreen;
+
+	void FadeToBlack(float fadeSpeed);
+	bool inTransition;
+	float introTimer = 0;
+	bool startIntroTimer;
 
 };
 
