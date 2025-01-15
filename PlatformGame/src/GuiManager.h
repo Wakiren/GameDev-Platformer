@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "GuiControl.h"
+#include "GuiControlButton.h"
 
 #include <list>
 
@@ -52,11 +53,21 @@ private:
 	SDL_Texture* GameOverScreen;
 	SDL_Texture* NextLevelScreen;
 	SDL_Texture* CreditScreen;
+	SDL_Texture* BlackRectangle;
 
-	void FadeToBlack(float fadeSpeed);
-	bool inTransition;
+	GuiControlButton* Play;
+	GuiControlButton* Credits;
+	GuiControlButton* Options;
+
+	SDL_Rect rect;
+	SDL_Rect pBt;
+
+	Uint8 alpha;
+	float fadeSpeed;
+
+
 	float introTimer = 0;
-	float introTimerTime = 600;
+	float introTimerTime = 1200;
 	bool startIntroTimer;
 
 };

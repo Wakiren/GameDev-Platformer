@@ -22,6 +22,14 @@ bool GuiManager::Start()
 {
 	IntroScreen  = Engine::GetInstance().textures.get()->Load("Assets/Textures/UI/IntroScreen.png");
 	TitleScreen = Engine::GetInstance().textures.get()->Load("Assets/Textures/UI/TitleScreen.png");
+	BlackRectangle = Engine::GetInstance().textures.get()->Load("Assets/Textures/UI/BlackRectangle.png");
+
+	rect = { 0, 0,2370, 1335 };
+	pBt = { 520, 350, 120,120 };
+
+	alpha = 0;
+	fadeSpeed = 4;
+
 	return true;
 }
 
@@ -47,22 +55,6 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	return guiControl;
 }
 
-void GuiManager::FadeToBlack(float fadeSpeed)
-{
-		SDL_Renderer* myRenderer = Engine::GetInstance().render.get()->renderer;
-		float screenW = Engine::GetInstance().render.get()->viewport.w;
-		float screenH = Engine::GetInstance().render.get()->viewport.h;
-		SDL_Rect fadeRect = { 0, 0, screenW, screenH };
-		Uint8 alpha = 0;
-		while (alpha < 255) {
-			alpha += fadeSpeed; 
-			if (alpha > 255) alpha = 255; 
-
-			Engine::GetInstance().render.get()->DrawRectangle(fadeRect, 0,0,0,alpha, true, false);
-			cout << alpha << endl;
-
-		}
-}
 
 bool GuiManager::Update(float dt)
 {	
@@ -70,7 +62,7 @@ bool GuiManager::Update(float dt)
 	{
 		control->Update(dt);
 	}
-	SDL_Rect rect = { 0, 0, 1580*1.5f, 890*1.5f };
+
 	float cameraX = Engine::GetInstance().render.get()->camera.x;
 	float cameraY = Engine::GetInstance().render.get()->camera.y;
 
@@ -79,13 +71,10 @@ bool GuiManager::Update(float dt)
 		case GuiManager::INTRO:
 
 
+			Engine::GetInstance().render.get()->DrawTexture(IntroScreen, 2 , 0, &rect,1, 0, 0, 0, 0.18);
+			Engine::GetInstance().render.get()->DrawTexture(BlackRectangle, 2, 0, &rect, 1, 0, 0, 0, 0.18, alpha);
+			if (alpha < 255 - fadeSpeed) { alpha += fadeSpeed; }
 
-			Engine::GetInstance().render.get()->DrawTexture(IntroScreen, 2 , 0, &rect,1, 0, 0, 0, 0.18 );
-			//if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN && !inTransition)
-			//{
-			//	inTransition = true;
-			//	FadeToBlack(1.f);
-			//}
 
 			startIntroTimer = true;
 			if (startIntroTimer) 
@@ -104,6 +93,22 @@ bool GuiManager::Update(float dt)
 		case GuiManager::TITLE:
 
 			Engine::GetInstance().render.get()->DrawTexture(TitleScreen, 2, 0, &rect, 1, 0, 0, 0, 0.18);
+			Engine::GetInstance().render.get()->DrawTexture(BlackRectangle, 2, 0, &rect, 1, 0, 0, 0, 0.18, alpha);
+
+			if (alpha > 0 + fadeSpeed) 
+			{
+				alpha -= fadeSpeed;
+			}
+
+
+			Play = (GuiControlButton*)CreateGuiControl(GuiControlType::BUTTON, 1, "PlayButton", pBt, this);
+
+			if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) 
+			{
+				state = GAME;
+			}
+			break;
+		case GuiManager::GAME:
 			break;
 		case GuiManager::PAUSE:
 			break;
