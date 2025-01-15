@@ -68,6 +68,8 @@ bool Enemy::Update(float dt)
 	{
 		return true;
 	}
+
+
 	Vector2D target = Engine::GetInstance().scene.get()->GetPlayerPosition();
 
 	distance.setX(abs(target.getX() - GetPosition().getX()));

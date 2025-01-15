@@ -80,7 +80,7 @@ bool GuiManager::Update(float dt)
 
 
 
-			Engine::GetInstance().render.get()->DrawTexture(IntroScreen, -15 , 0, &rect,1, 0, 0, 0, 0.18 );
+			Engine::GetInstance().render.get()->DrawTexture(IntroScreen, 2 , 0, &rect,1, 0, 0, 0, 0.18 );
 			//if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_Z) == KEY_DOWN && !inTransition)
 			//{
 			//	inTransition = true;
@@ -103,8 +103,7 @@ bool GuiManager::Update(float dt)
 			break;
 		case GuiManager::TITLE:
 
-			Engine::GetInstance().render.get()->DrawTexture(TitleScreen, -15, 0, &rect, 1, 0, 0, 0, 0.18);
-
+			Engine::GetInstance().render.get()->DrawTexture(TitleScreen, 2, 0, &rect, 1, 0, 0, 0, 0.18);
 			break;
 		case GuiManager::PAUSE:
 			break;

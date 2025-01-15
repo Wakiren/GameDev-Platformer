@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Log.h"
 #include "Physics.h"
+#include "GuiManager.h"
 
 #include "tracy/Tracy.hpp"
 
@@ -67,6 +68,8 @@ bool Player::Start() {
 
 	pbody->body->SetFixedRotation(true);
 
+
+
 	//Sounds
 	jump = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/jump.wav");
 	gameSaved = Engine::GetInstance().audio.get()->LoadFx("Assets/Audio/Fx/confirmation_001.ogg");
@@ -80,6 +83,7 @@ bool Player::Start() {
 bool Player::Update(float dt)
 {
 	ZoneScoped;
+
 	Walking(dt);
 	Jumping(dt);
 	Dashing(dt);

@@ -36,6 +36,7 @@ public:
 	{
 		INTRO,
 		TITLE,
+		GAME,
 		PAUSE,
 		CREDIT,
 		ENDLEVEL,
