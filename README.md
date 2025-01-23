@@ -1,6 +1,7 @@
 # GameDev-Platformer
 
 Description:
+
 Daydream is a platformer 2D 1-Bit color palette video game. You will play as a creature which has to defeat all the enemies and jump all the obstacles to reach the end. 
 
 Controls:
@@ -29,4 +30,5 @@ Optimization list:
 - PathFinding Restrictions
 
 Notes:
+
 Level 2 is done but not yet implemented into the game itself.
